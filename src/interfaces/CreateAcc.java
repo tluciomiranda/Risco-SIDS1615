@@ -1,25 +1,22 @@
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
+package interfaces;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import javax.swing.JLabel;
+
+import java.awt.BorderLayout;
 import java.awt.Color;
-import javax.swing.JTextField;
-import javax.swing.JSpinner;
-import java.awt.GridLayout;
+import java.awt.EventQueue;
 import java.awt.Font;
-import javax.swing.SwingConstants;
-import java.awt.FlowLayout;
-import java.awt.Canvas;
-import javax.swing.JPasswordField;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
 
 public class CreateAcc extends JFrame {
 
@@ -131,8 +128,8 @@ public class CreateAcc extends JFrame {
 		btnExit.setBounds(904, 677, 92, 34);
 		panel.add(btnExit);
 		
-		JLabel background = new JLabel(new ImageIcon("risk-funagain-com.jpg"));
-		background.setBounds(0, 109, 1024, 768);
+		JLabel background = new JLabel(new ImageIcon("risk.jpg"));
+		background.setBounds(0, 50, 1024, 768);
 		panel.add(background);
 	}
 }
