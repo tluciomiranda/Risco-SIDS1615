@@ -1,16 +1,21 @@
 package main;
 
+import java.util.Random;
+
 import communication.*;
 
-public class Main {
+public class Main 
+{
+	public static HttpSvr http;
+	public static Random randomGenerator = new Random();
 
 	public static void main(String[] args) 
 	{
-		HttpSvr http = new HttpSvr(80);
-		
+		//if(args[0])
+		//inicia server HTTP
+		http = new HttpSvr(80);
 		http.initServer();
-		Room jogo = new Room();
 		
-		http.addContext("1", jogo);
+		Room jogo = new Room("private");
 	}
 }

@@ -27,17 +27,17 @@ public class HttpSvr {
 	
 	public void initServer()
 	{		
-		svr.setExecutor(null);
+		this.svr.setExecutor(null);
 	    //svr.createContext("/jogo", new MyHandler());
 	    //svr.createContext("/joga", new MyHandler2());
 	    //svr.createContext("/joga/umjogo", new MyHandler3());
 	    
-		svr.start();
+		this.svr.start();
 	}
 	
 	public void addContext(String cont, Room room)
 	{
-	    svr.createContext("/jogo/"+cont, room);
+		this.svr.createContext("/jogo/" + cont, room);
 	}
 }
 
