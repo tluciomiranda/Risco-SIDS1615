@@ -16,5 +16,8 @@ public class Main
 		http.initServer();
 		
 		Room jogo = new Room("private");
+		
+		// atribuir contexto ao servidor HTTP
+		http.addContext(Long.toString(jogo.getID()), jogo);
 	}
 }

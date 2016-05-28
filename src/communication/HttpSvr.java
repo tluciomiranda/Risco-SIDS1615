@@ -4,6 +4,8 @@ import main.*;
 
 import java.io.*;
 import java.net.*;
+import java.util.*;
+
 import com.sun.net.httpserver.*;
 
 public class HttpSvr {
@@ -39,6 +41,27 @@ public class HttpSvr {
 	{
 		this.svr.createContext("/jogo/" + cont, room);
 	}
+	
+	public Map<String, String> queryToMap(String query)
+	{
+	    Map<String, String> result = new HashMap<String, String>();
+	    
+	    for (String param : query.split("&")) 
+	    {
+	        String pair[] = param.split("=");
+	        
+	        if(pair.length > 1) 
+	        {
+	            result.put(pair[0], pair[1]);
+	        }
+	        else
+	        {
+	            result.put(pair[0], "");
+	        }
+	    }
+	    
+	    return result;
+	  }
 }
 
 
