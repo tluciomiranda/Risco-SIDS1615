@@ -2,24 +2,25 @@ package main;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.*;
 
 import com.sun.net.httpserver.*;
 
 public class Room implements HttpHandler 
 {
-	private int id;
+	private long id;
 	private String type;
 	
 	public Room(String type)
 	{
 		// atribui id a room
-		this.id = Main.randomGenerator.nextInt(1000000000);
-		
+		this.id = new Date().getTime();
+		System.out.println(this.id);
 		// atribui tipo (privado ou publico)
 		this.setType(type);
 		
 		// atribuir contexto ao servidor HTTP
-		Main.http.addContext(Integer.toString(this.id), this);
+		Main.http.addContext(Long.toString(this.id), this);
 	}
 	
     @Override
