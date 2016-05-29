@@ -1,7 +1,4 @@
 package communication;
-import main.*;
-
-
 import java.io.*;
 import java.net.*;
 import java.util.*;
@@ -30,10 +27,6 @@ public class HttpSvr {
 	public void initServer()
 	{		
 		this.svr.setExecutor(null);
-	    //svr.createContext("/jogo", new MyHandler());
-	    //svr.createContext("/joga", new MyHandler2());
-	    //svr.createContext("/joga/umjogo", new MyHandler3());
-	    
 		this.svr.start();
 	}
 	

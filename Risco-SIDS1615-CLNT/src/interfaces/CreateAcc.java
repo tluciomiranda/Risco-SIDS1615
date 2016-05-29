@@ -7,6 +7,7 @@ import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -18,12 +19,18 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
+import main.Main;
+import utils.Utils;
+
 public class CreateAcc extends JFrame {
 
 	private JPanel contentPane;
-	private JTextField textField;
+	private JTextField emailField;
+	private JTextField usernameField;
 	private JPasswordField passwordField;
 
+	public Login loginUI;
+	
 	/**
 	 * Launch the application.
 	 */
@@ -58,7 +65,7 @@ public class CreateAcc extends JFrame {
 		panel.setLayout(null);
 		
 		JPanel panel_1 = new JPanel();
-		panel_1.setBounds(261, 317, 445, 231);
+		panel_1.setBounds(261, 318, 445, 231);
 		panel.add(panel_1);
 		panel_1.setLayout(null);
 		
@@ -67,33 +74,42 @@ public class CreateAcc extends JFrame {
 		label.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		panel_1.add(label);
 		
-		textField = new JTextField();
-		textField.setBounds(23, 63, 397, 32);
-		panel_1.add(textField);
-		textField.setColumns(10);
+		emailField = new JTextField();
+		emailField.setBounds(23, 50, 397, 32);
+		panel_1.add(emailField);
+		emailField.setColumns(10);
 		
-		passwordField = new JPasswordField();
-		passwordField.setBounds(23, 121, 397, 32);
-		panel_1.add(passwordField);
+		usernameField = new JTextField();
+		usernameField.setBounds(23, 99, 397, 32);
+		panel_1.add(usernameField);
 		
 		// botao login
 		JButton btnLogin = new JButton("Save");
 		btnLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) 
-			{	
-				System.out.println("click guardar");
+			{
+				performRegister();
 			}
+			
 		});
-		btnLogin.setBounds(331, 164, 89, 23);
+		btnLogin.setBounds(331, 195, 89, 23);
 		panel_1.add(btnLogin);
 				
-		JLabel lblPassword = new JLabel("Username:");
-		lblPassword.setBounds(33, 48, 65, 14);
+		JLabel lblEmail = new JLabel("Email:");
+		lblEmail.setBounds(33, 33, 65, 14);
+		panel_1.add(lblEmail);
+		
+		JLabel lblUsername = new JLabel("Username:");
+		lblUsername.setBounds(33, 83, 65, 14);
+		panel_1.add(lblUsername);
+		
+		JLabel lblPassword = new JLabel("Password:");
+		lblPassword.setBounds(33, 137, 65, 14);
 		panel_1.add(lblPassword);
 		
-		JLabel label_1 = new JLabel("Password:");
-		label_1.setBounds(33, 106, 65, 14);
-		panel_1.add(label_1);
+		passwordField = new JPasswordField();
+		passwordField.setBounds(23, 150, 397, 32);
+		panel_1.add(passwordField);
 		
 		JPanel panel_2 = new JPanel();
 		panel_2.setBounds(0, 0, 998, 123);
@@ -131,5 +147,35 @@ public class CreateAcc extends JFrame {
 		JLabel background = new JLabel(new ImageIcon("risk.jpg"));
 		background.setBounds(0, 50, 1024, 768);
 		panel.add(background);
+	}
+	
+	public void performRegister()
+	{
+		String result = null;
+		String usr = usernameField.getText();
+		String password = new String(passwordField.getPassword());
+		String email = emailField.getText();
+		
+		password = Utils.encrypt(password);
+
+		try
+		{
+			result = Main.cl.httpReq("/user?action=register&username=" + usr + "&password=" + password + "&email=" + email);
+		}
+		catch (IOException e1)
+		{
+			e1.printStackTrace();
+		}
+		
+		if(result.equals("OK"))
+		{
+			this.setVisible(false);
+			loginUI.setVisible(true);
+		}
+	}
+
+	public void setLoginUI(Login ui)
+	{
+		this.loginUI = ui;
 	}
 }

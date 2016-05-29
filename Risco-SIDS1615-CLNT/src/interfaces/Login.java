@@ -36,13 +36,17 @@ public class Login extends JFrame
 	public JButton btnCreateAccount;
 	public JLabel lblDadosDeAcesso;
 	
-	public volatile String result;
+	public CreateAcc createAccount;
+	
+	//public volatile String result;
 	
 	/**
 	 * Create the frame.
 	 */
 	public Login() 
 	{
+		createAccount = new CreateAcc();
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1024, 768);
 		contentPane = new JPanel();
@@ -81,18 +85,7 @@ public class Login extends JFrame
 		{
 			public void actionPerformed(ActionEvent e) 
 			{
-				String usr = textField.getText();
-				String password = new String(passwordField.getPassword());
-				password = Utils.encrypt(password);
-		
-				try
-				{
-					result = Main.cl.httpReq("/user?action=login&username=" + usr + "&password=" + password);
-				}
-				catch (IOException e1)
-				{
-					e1.printStackTrace();
-				}
+				performLogin(e);
 			}			
 		});
 		
@@ -104,8 +97,8 @@ public class Login extends JFrame
 		btnCreateAccount.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent e) 
-			{		
-				result = "Criar";
+			{
+				performCreation(e);
 			}
 		});
 		btnCreateAccount.setBounds(157, 197, 126, 23);
@@ -177,23 +170,45 @@ public class Login extends JFrame
 		panel.add(background);
 	}
 	
-	public JButton getLoginButton()
+	public CreateAcc getCreateAccount()
 	{
-		return btnLogin;		
+		return createAccount;
 	}
 	
-	public JButton getCreateAccButton()
+	public void performLogin(ActionEvent e)
 	{
-		return btnCreateAccount;
+		String usr = textField.getText();
+		String password = new String(passwordField.getPassword());
+		password = Utils.encrypt(password);
+		String result = null;
+		
+		try
+		{
+			result = Main.cl.httpReq("/user?action=login&username=" + usr + "&password=" + password);
+		}
+		catch (IOException e1)
+		{
+			e1.printStackTrace();
+		}
+		
+		if(result.equals("OK"))
+		{
+			this.setVisible(false);
+		}
 	}
 	
-	public String getResult()
+	public void performCreation(ActionEvent e) 
 	{
-		return result;
+		createAccount.setLoginUI(this);
+		createAccount.setVisible(true);
+		this.setVisible(false);
 	}
 	
-	public void setResult(String result)
+	public void dosss2() 
 	{
-		this.result = result;
+		CreateAcc acc = new CreateAcc();
+		acc.setVisible(true);
+		this.setVisible(false);
 	}
+	
 }

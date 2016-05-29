@@ -17,21 +17,15 @@ public class Interfaces
 	public void controlaInterfaces()
 	{
 		this.loginInterface.setVisible(true);
-		String res; 
-		
-		while((res = loginInterface.getResult()) != null)
-		{
-			System.out.println(res);
-			if(res.equals("Criar"))
-			{
-				this.loginInterface.setVisible(false);
-				this.createAccInterface.setVisible(true);
 				
-				loginInterface.setResult(null);
-			}
-			else if(res.equals("LoginOK"))
+		while(true)
+		{
+			if(!loginInterface.isVisible())
 			{
-				System.out.println(res);
+				if(!loginInterface.getCreateAccount().isVisible())
+				{
+					//lancar interface de escolha de salas
+				}
 			}
 		}
 	}

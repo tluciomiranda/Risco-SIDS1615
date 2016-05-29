@@ -22,11 +22,9 @@ public class HttpClnt
 		while ((inputLine = rd.readLine()) != null)
 		{
 			response = inputLine;
-			/*
 			if(response.equals("OK")){
-				inter.doStuff();
+				inter.getLoginUI().dosss2();
 			}
-			*/
 			
 		}
 		
