@@ -37,9 +37,9 @@ public class HttpSvr {
 		this.svr.start();
 	}
 	
-	public void addContext(String cont, Room room)
+	public void addContext(String cont, HttpHandler hand)
 	{
-		this.svr.createContext("/jogo/" + cont, room);
+		this.svr.createContext(cont, hand);
 	}
 	
 	public Map<String, String> queryToMap(String query)
@@ -62,31 +62,4 @@ public class HttpSvr {
 	    
 	    return result;
 	  }
-}
-
-
-
-
-
-class MyHandler2 implements HttpHandler {
-    @Override
-    public void handle(HttpExchange t) throws IOException {
-        String response = "This is the response2";
-        t.sendResponseHeaders(200, response.length());
-        OutputStream os = t.getResponseBody();
-        os.write(response.getBytes());
-        os.close();
-    }
-}
-
-
-class MyHandler3 implements HttpHandler {
-    @Override
-    public void handle(HttpExchange t) throws IOException {
-        String response = "This is the response3";
-        t.sendResponseHeaders(200, response.length());
-        OutputStream os = t.getResponseBody();
-        os.write(response.getBytes());
-        os.close();
-    }
 }

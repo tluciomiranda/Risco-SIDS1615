@@ -4,7 +4,7 @@ import java.util.*;
 
 import communication.*;
 
-public class Main 
+public class Main
 {
 	public static HttpSvr http;
 
@@ -13,11 +13,16 @@ public class Main
 		//if(args[0])
 		//inicia server HTTP
 		http = new HttpSvr(8083);
-		http.initServer();
 		
+		User userThread = new User();
 		Room jogo = new Room("private");
 		
 		// atribuir contexto ao servidor HTTP
-		http.addContext(Long.toString(jogo.getID()), jogo);
+		http.addContext("/jogo/" + Long.toString(jogo.getID()), jogo);
+		http.addContext("/user/", userThread);
+		
+		http.initServer();
+		userThread.start();
 	}
+
 }
