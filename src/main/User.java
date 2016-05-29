@@ -3,18 +3,22 @@ package main;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.*;
+import db.*;
+import utils.Utils;
+
+import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import com.sun.net.httpserver.*;
 
 public class User extends Thread implements HttpHandler
 {
-	private volatile BlockingQueue<HttpExchange> opers = null;
+	private volatile LinkedBlockingQueue<HttpExchange> opers = new LinkedBlockingQueue<HttpExchange>();
+	public Db db;
 	
 	public void handle(HttpExchange t) throws IOException 
     {
-		synchronized(opers)
-		{
 			try 
 			{System.out.println("put prod");
 				opers.put(t);
@@ -24,39 +28,63 @@ public class User extends Thread implements HttpHandler
 			}
 			
 			opers.notify();
-		}
+	
     }
+	
+	public void doLogin(Map <String,String> params, HttpExchange exc){
+		String username = params.get("username");
+		String password = Utils.encrypt(params.get("password"));
+		
+		System.out.println("beforee loginUser");
+		boolean man = db.loginUser(username, password);
+		System.out.println("After loginUser");
+		if(man){
+			try 
+    		{
+				System.out.println("RESPONDE");
+    			String response = "This is the response from user class";			        
+				exc.sendResponseHeaders(200, response.length());						
+		        OutputStream os = exc.getResponseBody();
+		        os.write(response.getBytes());
+		        os.close();
+		        
+	        }
+    		catch (IOException e)
+    		{
+				e.printStackTrace();
+			}
+			
+		}
+		else{
+			System.out.println("NAO EXISTE NAO RESPONDE");
+		}
+		
+		
+		
+		
+	}
 
 	@Override
 	public void run()
 	{
-		while(true)
-		{System.out.println("while");
+		db = new Db();
+		db.startDb();
+		boolean loop =true;
+		
+		while(loop){
+			//System.out.println("while");
+			
+		
 			HttpExchange exc = null; 
-			synchronized(opers)
-			{
-				while (opers.isEmpty())
-				{
-					try
-					{System.out.println("wait cons");
-						opers.wait();
-					} 
-					catch (InterruptedException e) 
-					{
-						e.printStackTrace();
-					}	
-				}	
 
+			if(!opers.isEmpty())
+			{
 				try {
 					exc = opers.take();
 				} catch (InterruptedException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-			}
-			
-			if(exc != null)
-			{
 				String query = exc.getRequestURI().getQuery();
 		    	System.out.println("got query   " + query);
 		    	if(query != null)
@@ -66,7 +94,8 @@ public class User extends Thread implements HttpHandler
 			        switch (params.get("action"))
 			        {
 			        	case "login":
-			        			
+			        		doLogin(params,exc);
+			        		//loop = false;
 			        		break;
 			        	case "registar":
 			        		
@@ -75,20 +104,7 @@ public class User extends Thread implements HttpHandler
 			        		
 			        		break;
 			        }
-			        
-			        // resposta
-		    		try 
-		    		{
-		    			String response = "This is the response from user class";			        
-						exc.sendResponseHeaders(200, response.length());						
-				        OutputStream os = exc.getResponseBody();
-				        os.write(response.getBytes());
-				        os.close();
-			        }
-		    		catch (IOException e)
-		    		{
-						e.printStackTrace();
-					}
+			     
 			    }
 		    	else  // resposta feia
 		    	{	

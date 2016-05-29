@@ -103,9 +103,11 @@ public class Db {
 	      System.out.println("Opened database successfully");
 
 	      stmt = c.createStatement();
-	      ResultSet rs = stmt.executeQuery( "SELECT COUNT(*) AS CNT FROM USER"+
-	      "WHERE USERNAMELOWER='"+username.toLowerCase()+"'"+
-	      " AND PASSWORD='"+password+"';" );
+	      System.out.println("BEFORE");
+	      ResultSet rs = stmt.executeQuery( "SELECT COUNT(*) AS CNT FROM USER WHERE USERNAMELOWER='"+username.toLowerCase()+"'"+
+	    	      " AND PASSWORD='"+password+"';" );
+	      
+	      System.out.println("AFTER");
 	      if(rs.getInt("CNT")>0){
 	    	  value = true;
 	    	  System.out.println("Login Successful");
