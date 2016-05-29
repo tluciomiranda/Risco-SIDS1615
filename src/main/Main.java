@@ -19,7 +19,7 @@ public class Main
 		
 		// atribuir contexto ao servidor HTTP
 		http.addContext("/jogo/" + Long.toString(jogo.getID()), jogo);
-		http.addContext("/user/", userThread);
+		http.addContext("/user", userThread);
 		
 		http.initServer();
 		userThread.start();
