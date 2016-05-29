@@ -78,8 +78,7 @@ public class User extends Thread implements HttpHandler
 				exc.sendResponseHeaders(200, response.length());						
 		        OutputStream os = exc.getResponseBody();
 		        os.write(response.getBytes());
-		        os.close();
-		        
+		        os.close();		        
 	        }
     		catch (IOException e)
     		{
