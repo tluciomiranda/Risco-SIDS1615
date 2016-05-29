@@ -63,11 +63,11 @@ public class User extends Thread implements HttpHandler
 		db.startDb();
 		
 		String username = params.get("username");
-		String password = Utils.encrypt(params.get("password"));
+		String password = params.get("password");
 		
 		System.out.println("beforee loginUser");
 		boolean man = db.loginUser(username, password);
-		System.out.println("After loginUser");
+		
 		if(man)		
 		{
 			try 

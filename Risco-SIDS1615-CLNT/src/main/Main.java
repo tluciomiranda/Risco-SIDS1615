@@ -1,21 +1,20 @@
 package main;
 
-import java.io.IOException;
-
 import communication.*;
+import interfaces.Interfaces;
 
 public class Main {
+	
+	public static HttpClnt cl;
 
 	public static void main(String[] args) 
 	{
-		HttpClnt cl = new HttpClnt();
-		try 
-		{
-			cl.httpReq();
-		}
-		catch (IOException e)
-		{
-			
-		}
+		Interfaces intf = new Interfaces();
+		
+		cl = new HttpClnt();
+		
+		cl.addInterface(intf);
+		
+		intf.controlaInterfaces();
 	}
 }

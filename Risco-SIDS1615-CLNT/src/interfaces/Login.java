@@ -1,12 +1,12 @@
 package interfaces;
 
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -18,32 +18,31 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
-public class Login extends JFrame {
+import main.Main;
+
+//import com.sun.deploy.uitoolkit.impl.fx.Utils;
+
+import utils.Utils;
+
+@SuppressWarnings("serial")
+public class Login extends JFrame 
+{
 
 	private JPanel contentPane;
 	private JTextField textField;
 	private JPasswordField passwordField;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Login frame = new Login();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
+	
+	public JButton btnLogin;
+	public JButton btnCreateAccount;
+	public JLabel lblDadosDeAcesso;
+	
+	public volatile String result;
+	
 	/**
 	 * Create the frame.
 	 */
-	public Login() {
+	public Login() 
+	{
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1024, 768);
 		contentPane = new JPanel();
@@ -77,22 +76,36 @@ public class Login extends JFrame {
 		panel_1.add(passwordField);
 		
 		// botao login
-		JButton btnLogin = new JButton("Login");
-		btnLogin.addActionListener(new ActionListener() {
+		btnLogin = new JButton("Login");
+		btnLogin.addActionListener(new ActionListener()
+		{
 			public void actionPerformed(ActionEvent e) 
-			{	
-				System.out.println("click login");
-			}
+			{
+				String usr = textField.getText();
+				String password = new String(passwordField.getPassword());
+				password = Utils.encrypt(password);
+		
+				try
+				{
+					result = Main.cl.httpReq("/user?action=login&username=" + usr + "&password=" + password);
+				}
+				catch (IOException e1)
+				{
+					e1.printStackTrace();
+				}
+			}			
 		});
+		
 		btnLogin.setBounds(331, 164, 89, 23);
 		panel_1.add(btnLogin);
 		
 		// botao criar conta
-		JButton btnCreateAccount = new JButton("Create Account");
-		btnCreateAccount.addActionListener(new ActionListener() {
+		btnCreateAccount = new JButton("Create Account");
+		btnCreateAccount.addActionListener(new ActionListener()
+		{
 			public void actionPerformed(ActionEvent e) 
-			{	
-				System.out.println("click addconta");
+			{		
+				result = "Criar";
 			}
 		});
 		btnCreateAccount.setBounds(157, 197, 126, 23);
@@ -105,6 +118,12 @@ public class Login extends JFrame {
 		JLabel label_1 = new JLabel("Password:");
 		label_1.setBounds(33, 106, 65, 14);
 		panel_1.add(label_1);
+		
+		JLabel lblDadosDeAcesso = new JLabel("Dados de acesso inv\u00E1lidos !");
+		lblDadosDeAcesso.setForeground(Color.RED);
+		lblDadosDeAcesso.setFont(new Font("Tahoma", Font.BOLD, 14));
+		lblDadosDeAcesso.setBounds(23, 164, 296, 23);
+		panel_1.add(lblDadosDeAcesso);
 		
 		JPanel panel_2 = new JPanel();
 		panel_2.setBounds(0, 0, 998, 122);
@@ -143,7 +162,8 @@ public class Login extends JFrame {
 		panel_6.add(lblLoginWithFacebook);
 		
 		JButton btnExit = new JButton("Exit");
-		btnExit.addActionListener(new ActionListener() {
+		btnExit.addActionListener(new ActionListener() 
+		{
 			public void actionPerformed(ActionEvent arg0) 
 			{
 				System.exit(0);
@@ -155,5 +175,25 @@ public class Login extends JFrame {
 		JLabel background =  new JLabel(new ImageIcon("risk.jpg"));
 		background.setBounds(0, 50, 1024, 768);
 		panel.add(background);
+	}
+	
+	public JButton getLoginButton()
+	{
+		return btnLogin;		
+	}
+	
+	public JButton getCreateAccButton()
+	{
+		return btnCreateAccount;
+	}
+	
+	public String getResult()
+	{
+		return result;
+	}
+	
+	public void setResult(String result)
+	{
+		this.result = result;
 	}
 }

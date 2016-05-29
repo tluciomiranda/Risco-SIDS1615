@@ -1,8 +1,8 @@
 package main;
 
-import java.util.*;
-
 import communication.*;
+import db.Db;
+import utils.Utils;
 
 public class Main
 {
@@ -17,6 +17,8 @@ public class Main
 		User userThread = new User();
 		Room jogo = new Room("private");
 		
+		Db db = new Db();
+		db.startDb();
 		// atribuir contexto ao servidor HTTP
 		http.addContext("/jogo/" + Long.toString(jogo.getID()), jogo);
 		http.addContext("/user", userThread);
