@@ -19,30 +19,62 @@ public class User extends Thread implements HttpHandler
 	
 	public void handle(HttpExchange t) throws IOException 
     {
-			try 
-			{System.out.println("put prod");
-				opers.put(t);
-			} catch (InterruptedException e) 
-			{
-				e.printStackTrace();
-			}
-			
-			opers.notify();
-	
+		String query = t.getRequestURI().getQuery();
+		System.out.println("got query   " + query);
+    	if(query != null)
+    	{
+    		Map <String,String> params = Main.http.queryToMap(query);
+	        
+	        switch (params.get("action"))
+	        {
+	        	case "login":
+	        		doLogin(params, t);
+	        		//loop = false;
+	        		break;
+	        	case "registar":
+	        		
+	        		break;
+	        	case "logout":
+	        		
+	        		break;
+	        }
+	    }
+    	else  // resposta feia
+    	{	
+    		try 
+    		{
+	            String response = "Invalid request.";
+	            
+	            t.sendResponseHeaders(200, response.length());
+	            OutputStream os = t.getResponseBody();
+	            os.write(response.getBytes());
+	            os.close();
+    		}
+    		catch (IOException e)
+    		{
+    			e.printStackTrace();
+    		}
+		}
     }
 	
-	public void doLogin(Map <String,String> params, HttpExchange exc){
+	public void doLogin(Map <String, String> params, HttpExchange exc)
+	{
+		db = new Db();
+		db.startDb();
+		
 		String username = params.get("username");
 		String password = Utils.encrypt(params.get("password"));
 		
 		System.out.println("beforee loginUser");
 		boolean man = db.loginUser(username, password);
 		System.out.println("After loginUser");
-		if(man){
+		if(man)		
+		{
 			try 
     		{
-				System.out.println("RESPONDE");
-    			String response = "This is the response from user class";			        
+				System.out.println("RESPONDE OK");
+    			String response = "OK";
+    			
 				exc.sendResponseHeaders(200, response.length());						
 		        OutputStream os = exc.getResponseBody();
 		        os.write(response.getBytes());
@@ -52,26 +84,33 @@ public class User extends Thread implements HttpHandler
     		catch (IOException e)
     		{
 				e.printStackTrace();
+			}			
+		}
+		else
+		{
+			try 
+    		{
+				System.out.println("RESPONDE NOK");
+    			String response = "NOK";
+    			
+				exc.sendResponseHeaders(200, response.length());
+		        OutputStream os = exc.getResponseBody();
+		        os.write(response.getBytes());
+		        os.close();
+	        }
+    		catch (IOException e)
+    		{
+				e.printStackTrace();
 			}
-			
 		}
-		else{
-			System.out.println("NAO EXISTE NAO RESPONDE");
-		}
-		
-		
-		
-		
 	}
 
 	@Override
 	public void run()
 	{
-		db = new Db();
-		db.startDb();
 		boolean loop =true;
-		
-		while(loop){
+		/*
+		//while(loop){
 			//System.out.println("while");
 			
 		
@@ -79,49 +118,20 @@ public class User extends Thread implements HttpHandler
 
 			if(!opers.isEmpty())
 			{
-				try {
-					exc = opers.take();
+				try {System.out.println("try exc");
+					exc = opers.take(); //System.out.println(exc.);
 				} catch (InterruptedException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				String query = exc.getRequestURI().getQuery();
-		    	System.out.println("got query   " + query);
-		    	if(query != null)
-		    	{
-		    		Map <String,String> params = Main.http.queryToMap(query);
-			        
-			        switch (params.get("action"))
-			        {
-			        	case "login":
-			        		doLogin(params,exc);
-			        		//loop = false;
-			        		break;
-			        	case "registar":
-			        		
-			        		break;
-			        	case "logout":
-			        		
-			        		break;
-			        }
-			     
-			    }
-		    	else  // resposta feia
-		    	{	
-		    		try 
-		    		{
-			            String response = "Invalid request.";
-			            exc.sendResponseHeaders(200, response.length());
-			            OutputStream os = exc.getResponseBody();
-			            os.write(response.getBytes());
-			            os.close();
-		    		}
-		    		catch (IOException e)
-		    		{
-		    			e.printStackTrace();
-		    		}
-				}
-			}
-		}		
+				
+		}		*/
+		
+		
+		
+		
+		
+		
+		
 	}
 }
