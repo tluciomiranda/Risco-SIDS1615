@@ -56,14 +56,14 @@ public class User extends Thread implements HttpHandler
 		String password = params.get("password");
 		
 		System.out.println("beforee loginUser");
-		boolean man = Main.db.loginUser(username, password);
+		int userid = Main.db.loginUser(username, password);
 		
-		if(man)		
+		if(userid > 0)		
 		{
 			try 
     		{
 				System.out.println("RESPONDE OK");
-    			String response = "OK";
+    			String response = "" + userid;
     			
 				exc.sendResponseHeaders(200, response.length());						
 		        OutputStream os = exc.getResponseBody();

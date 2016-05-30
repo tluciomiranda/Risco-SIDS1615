@@ -138,6 +138,7 @@ public class CreatePrivateRoom extends JFrame {
 		String result = null;
 		String maxplayers = maxPlayersField.getText();
 		String password = new String(passwordField.getPassword());
+		int usr = Main.userID;
 		
 		password = Utils.encrypt(password);
 

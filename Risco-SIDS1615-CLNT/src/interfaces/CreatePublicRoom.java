@@ -127,6 +127,7 @@ public class CreatePublicRoom extends JFrame {
 	{
 		String result = null;
 		String maxplayers = maxPlayersField.getText();
+		int usr = Main.userID;
 		
 		try
 		{

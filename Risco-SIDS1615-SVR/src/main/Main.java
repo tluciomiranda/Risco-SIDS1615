@@ -2,7 +2,6 @@ package main;
 
 import communication.*;
 import db.Db;
-import utils.Utils;
 
 public class Main
 {
@@ -22,8 +21,7 @@ public class Main
 		
 		// atribuir contexto ao servidor HTTP
 		http.addContext("/game", manager);
-		http.addContext("/user", userThread);
-		
+		http.addContext("/user", userThread);		
 	}
 
 }

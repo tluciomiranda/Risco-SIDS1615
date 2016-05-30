@@ -138,7 +138,7 @@ public class EnterPrivateRoom extends JFrame {
 		String result = null;
 		String roomid = roomIdField.getText();
 		String password = new String(passwordField.getPassword());
-		
+		int usr = Main.userID;
 		password = Utils.encrypt(password);
 		
 		try

@@ -127,10 +127,11 @@ public class EnterPublicRoom extends JFrame {
 	public void performEnter()
 	{
 		String result = null;
+		int usr = Main.userID;
 		
 		try
 		{
-			result = Main.cl.httpReq("/game?action=create&user=" + usr + "&type=public&maxplayers=" + maxplayers);
+			result = Main.cl.httpReq("/game?action=join&user=" + usr + "&type=public&id="/* + roomid*/);
 		}
 		catch (IOException e1)
 		{
