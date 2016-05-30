@@ -3,7 +3,6 @@ package interfaces;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -14,27 +13,23 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 import main.Main;
-import utils.Utils;
 
-public class CreateAcc extends JFrame {
+@SuppressWarnings("serial")
+public class EnterPublicRoom extends JFrame {
 
 	private JPanel contentPane;
-	private JTextField emailField;
-	private JTextField usernameField;
-	private JPasswordField passwordField;
 
-	public Login loginUI;
-	
+	private ChooseRoom chooseRoom;
+
 	/**
 	 * Create the frame.
 	 */
-	public CreateAcc() {
+	public EnterPublicRoom()
+	{		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1024, 768);
 		contentPane = new JPanel();
@@ -49,51 +44,47 @@ public class CreateAcc extends JFrame {
 		panel.setLayout(null);
 		
 		JPanel panel_1 = new JPanel();
-		panel_1.setBounds(261, 318, 445, 231);
+		panel_1.setBounds(50, 172, 905, 450);
 		panel.add(panel_1);
 		panel_1.setLayout(null);
 		
-		JLabel label = new JLabel("Enter your account information");
+		JLabel label = new JLabel("Available public rooms");
 		label.setBounds(10, 5, 273, 32);
 		label.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		panel_1.add(label);
 		
-		emailField = new JTextField();
-		emailField.setBounds(23, 50, 397, 32);
-		panel_1.add(emailField);
-		emailField.setColumns(10);
-		
-		usernameField = new JTextField();
-		usernameField.setBounds(23, 99, 397, 32);
-		panel_1.add(usernameField);
-		
 		// botao login
-		JButton btnLogin = new JButton("Save");
+		JButton btnLogin = new JButton("Check");
 		btnLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) 
 			{
-				performRegister();
-			}
-			
+				// fazer pedido para ver salas publicas disponiveis
+			}			
 		});
-		btnLogin.setBounds(331, 195, 89, 23);
+		btnLogin.setBounds(806, 416, 89, 23);
 		panel_1.add(btnLogin);
-				
-		JLabel lblEmail = new JLabel("Email:");
-		lblEmail.setBounds(33, 33, 65, 14);
-		panel_1.add(lblEmail);
 		
-		JLabel lblUsername = new JLabel("Username:");
-		lblUsername.setBounds(33, 83, 65, 14);
-		panel_1.add(lblUsername);
+		JButton button = new JButton("Cancel");
+		button.setBounds(10, 416, 89, 23);
+		button.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) 
+			{
+				returnChooseRoom(e);
+			}			
+		});
+		panel_1.add(button);
 		
-		JLabel lblPassword = new JLabel("Password:");
-		lblPassword.setBounds(33, 137, 65, 14);
-		panel_1.add(lblPassword);
+		JLabel lblRoomId = new JLabel("Room ID");
+		lblRoomId.setBounds(20, 48, 46, 14);
+		panel_1.add(lblRoomId);
 		
-		passwordField = new JPasswordField();
-		passwordField.setBounds(23, 150, 397, 32);
-		panel_1.add(passwordField);
+		JLabel label_1 = new JLabel("Players");
+		label_1.setBounds(646, 48, 46, 14);
+		panel_1.add(label_1);
+		
+		JLabel label_2 = new JLabel("Maximum");
+		label_2.setBounds(720, 48, 46, 14);
+		panel_1.add(label_2);
 		
 		JPanel panel_2 = new JPanel();
 		panel_2.setBounds(0, 0, 998, 123);
@@ -133,33 +124,34 @@ public class CreateAcc extends JFrame {
 		panel.add(background);
 	}
 	
-	public void performRegister()
+	public void performEnter()
 	{
 		String result = null;
-		String usr = usernameField.getText();
-		String password = new String(passwordField.getPassword());
-		String email = emailField.getText();
 		
-		password = Utils.encrypt(password);
-
 		try
 		{
-			result = Main.cl.httpReq("/user?action=register&username=" + usr + "&password=" + password + "&email=" + email);
+			result = Main.cl.httpReq("/game?action=create&user=" + usr + "&type=public&maxplayers=" + maxplayers);
 		}
 		catch (IOException e1)
 		{
 			e1.printStackTrace();
 		}
 		
+		//ajustar resultado
 		if(result.equals("OK"))
 		{
 			this.dispose();
-			loginUI.setVisible(true);
 		}
 	}
-
-	public void setLoginUI(Login ui)
+	
+	public void setChooseRoom(ChooseRoom cr)
 	{
-		this.loginUI = ui;
+		this.chooseRoom = cr;
+	}
+	
+	public void returnChooseRoom(ActionEvent e) 
+	{
+		chooseRoom.setVisible(true);
+		this.dispose();
 	}
 }

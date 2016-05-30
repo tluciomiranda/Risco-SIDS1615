@@ -28,7 +28,7 @@ public class User extends Thread implements HttpHandler
 	        		doRegister(params, t);
 	        		break;
 	        	case "logout":
-	        		
+	        		doLogout(params, t);
 	        		break;
 	        }
 	    }
@@ -50,7 +50,7 @@ public class User extends Thread implements HttpHandler
 		}
     }
 	
-	public void doLogin(Map <String, String> params, HttpExchange exc)
+	private void doLogin(Map <String, String> params, HttpExchange exc)
 	{
 		String username = params.get("username");
 		String password = params.get("password");
@@ -94,7 +94,7 @@ public class User extends Thread implements HttpHandler
 		}
 	}
 	
-	public void doRegister(Map <String, String> params, HttpExchange exc)
+	private void doRegister(Map <String, String> params, HttpExchange exc)
 	{
 		String username = params.get("username");
 		String password = params.get("password");
@@ -135,5 +135,10 @@ public class User extends Thread implements HttpHandler
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	private void doLogout(Map <String, String> params, HttpExchange exc)
+	{
+		
 	}
 }

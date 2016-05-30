@@ -22,19 +22,31 @@ import javax.swing.border.EmptyBorder;
 import main.Main;
 import utils.Utils;
 
-public class CreateAcc extends JFrame {
+@SuppressWarnings("serial")
+public class ChooseRoom extends JFrame {
 
 	private JPanel contentPane;
-	private JTextField emailField;
-	private JTextField usernameField;
-	private JPasswordField passwordField;
-
-	public Login loginUI;
 	
+	private CreatePrivateRoom cprivr;
+	private CreatePublicRoom cpubr;
+	private EnterPrivateRoom entprivr;
+	private EnterPublicRoom entpubr;
+
 	/**
 	 * Create the frame.
 	 */
-	public CreateAcc() {
+	public ChooseRoom() 
+	{				
+		cprivr = new CreatePrivateRoom();
+		cpubr = new CreatePublicRoom();
+		entprivr = new EnterPrivateRoom();
+		entpubr = new EnterPublicRoom();
+		
+		cprivr.setChooseRoom(this);
+		cpubr.setChooseRoom(this);
+		entprivr.setChooseRoom(this);
+		entpubr.setChooseRoom(this);
+				
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1024, 768);
 		contentPane = new JPanel();
@@ -49,51 +61,57 @@ public class CreateAcc extends JFrame {
 		panel.setLayout(null);
 		
 		JPanel panel_1 = new JPanel();
-		panel_1.setBounds(261, 318, 445, 231);
+		panel_1.setBounds(263, 201, 445, 411);
 		panel.add(panel_1);
 		panel_1.setLayout(null);
 		
-		JLabel label = new JLabel("Enter your account information");
-		label.setBounds(10, 5, 273, 32);
-		label.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		panel_1.add(label);
-		
-		emailField = new JTextField();
-		emailField.setBounds(23, 50, 397, 32);
-		panel_1.add(emailField);
-		emailField.setColumns(10);
-		
-		usernameField = new JTextField();
-		usernameField.setBounds(23, 99, 397, 32);
-		panel_1.add(usernameField);
-		
-		// botao login
-		JButton btnLogin = new JButton("Save");
-		btnLogin.addActionListener(new ActionListener() {
+		JButton btnNewButton = new JButton("Enter Public Room");
+		btnNewButton.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 16));
+		btnNewButton.addActionListener(new ActionListener() 
+		{
 			public void actionPerformed(ActionEvent e) 
 			{
-				performRegister();
+				gotoEnterPublic(e);
 			}
-			
 		});
-		btnLogin.setBounds(331, 195, 89, 23);
-		panel_1.add(btnLogin);
-				
-		JLabel lblEmail = new JLabel("Email:");
-		lblEmail.setBounds(33, 33, 65, 14);
-		panel_1.add(lblEmail);
+		btnNewButton.setBounds(30, 36, 379, 63);
+		panel_1.add(btnNewButton);
 		
-		JLabel lblUsername = new JLabel("Username:");
-		lblUsername.setBounds(33, 83, 65, 14);
-		panel_1.add(lblUsername);
+		JButton button = new JButton("Create Public Room");
+		button.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 16));
+		button.addActionListener(new ActionListener() 
+		{
+			public void actionPerformed(ActionEvent arg0) 
+			{
+				gotoCreatePublic();
+			}
+		});
+		button.setBounds(30, 131, 379, 63);
+		panel_1.add(button);
 		
-		JLabel lblPassword = new JLabel("Password:");
-		lblPassword.setBounds(33, 137, 65, 14);
-		panel_1.add(lblPassword);
+		JButton button_1 = new JButton("Enter Private Room");
+		button_1.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 16));
+		button_1.addActionListener(new ActionListener() 
+		{
+			public void actionPerformed(ActionEvent arg0) 
+			{
+				gotoEnterPrivate();
+			}
+		});
+		button_1.setBounds(30, 224, 379, 63);
+		panel_1.add(button_1);
 		
-		passwordField = new JPasswordField();
-		passwordField.setBounds(23, 150, 397, 32);
-		panel_1.add(passwordField);
+		JButton button_2 = new JButton("Create Private Room");
+		button_2.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 16));
+		button_2.addActionListener(new ActionListener() 
+		{
+			public void actionPerformed(ActionEvent arg0) 
+			{
+				gotoCreatePrivate();
+			}
+		});
+		button_2.setBounds(30, 318, 379, 63);
+		panel_1.add(button_2);
 		
 		JPanel panel_2 = new JPanel();
 		panel_2.setBounds(0, 0, 998, 123);
@@ -113,7 +131,7 @@ public class CreateAcc extends JFrame {
 		panel_4.setBounds(10, 77, 425, 35);
 		panel_2.add(panel_4);
 		
-		JLabel lblPleaseLoginBelow = new JLabel("Create your account here");
+		JLabel lblPleaseLoginBelow = new JLabel("Please choose your type of game");
 		panel_4.add(lblPleaseLoginBelow);
 		lblPleaseLoginBelow.setHorizontalAlignment(SwingConstants.CENTER);
 		lblPleaseLoginBelow.setFont(new Font("Tahoma", Font.PLAIN, 20));
@@ -133,33 +151,27 @@ public class CreateAcc extends JFrame {
 		panel.add(background);
 	}
 	
-	public void performRegister()
+	private void gotoEnterPublic(ActionEvent e)
 	{
-		String result = null;
-		String usr = usernameField.getText();
-		String password = new String(passwordField.getPassword());
-		String email = emailField.getText();
-		
-		password = Utils.encrypt(password);
-
-		try
-		{
-			result = Main.cl.httpReq("/user?action=register&username=" + usr + "&password=" + password + "&email=" + email);
-		}
-		catch (IOException e1)
-		{
-			e1.printStackTrace();
-		}
-		
-		if(result.equals("OK"))
-		{
-			this.dispose();
-			loginUI.setVisible(true);
-		}
+		entpubr.setVisible(true);
+		this.dispose();		
 	}
-
-	public void setLoginUI(Login ui)
+	
+	private void gotoEnterPrivate()
 	{
-		this.loginUI = ui;
+		entprivr.setVisible(true);
+		this.dispose();		
+	}
+	
+	private void gotoCreatePublic()
+	{
+		cpubr.setVisible(true);
+		this.dispose();		
+	}
+	
+	private void gotoCreatePrivate()
+	{
+		this.cprivr.setVisible(true);
+		this.dispose();		
 	}
 }

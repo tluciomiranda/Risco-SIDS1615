@@ -29,6 +29,8 @@ public class Login extends JFrame
 {
 
 	private JPanel contentPane;
+	private JPanel panel;
+	private JPanel panel_1;
 	private JTextField textField;
 	private JPasswordField passwordField;
 	
@@ -36,7 +38,8 @@ public class Login extends JFrame
 	public JButton btnCreateAccount;
 	public JLabel lblDadosDeAcesso;
 	
-	public CreateAcc createAccount;
+	private CreateAcc createAccount;
+	private ChooseRoom chooseRoom;
 	
 	//public volatile String result;
 	
@@ -46,6 +49,7 @@ public class Login extends JFrame
 	public Login() 
 	{
 		createAccount = new CreateAcc();
+		chooseRoom = new ChooseRoom();
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1024, 768);
@@ -55,12 +59,12 @@ public class Login extends JFrame
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
 		
-		JPanel panel = new JPanel();
+		panel = new JPanel();
 		panel.setBackground(Color.BLACK);
 		contentPane.add(panel, BorderLayout.CENTER);
 		panel.setLayout(null);
 		
-		JPanel panel_1 = new JPanel();
+		panel_1 = new JPanel();
 		panel_1.setBounds(259, 197, 445, 231);
 		panel.add(panel_1);
 		panel_1.setLayout(null);
@@ -117,7 +121,8 @@ public class Login extends JFrame
 		lblDadosDeAcesso.setFont(new Font("Tahoma", Font.BOLD, 14));
 		lblDadosDeAcesso.setBounds(23, 164, 296, 23);
 		panel_1.add(lblDadosDeAcesso);
-		
+		lblDadosDeAcesso.setVisible(false);
+
 		JPanel panel_2 = new JPanel();
 		panel_2.setBounds(0, 0, 998, 122);
 		panel.add(panel_2);
@@ -193,7 +198,12 @@ public class Login extends JFrame
 		
 		if(result.equals("OK"))
 		{
-			this.setVisible(false);
+			chooseRoom.setVisible(true);
+			this.dispose();
+		}
+		else
+		{
+			
 		}
 	}
 	
@@ -203,12 +213,4 @@ public class Login extends JFrame
 		createAccount.setVisible(true);
 		this.setVisible(false);
 	}
-	
-	public void dosss2() 
-	{
-		CreateAcc acc = new CreateAcc();
-		acc.setVisible(true);
-		this.setVisible(false);
-	}
-	
 }

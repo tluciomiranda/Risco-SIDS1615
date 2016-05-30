@@ -3,15 +3,13 @@ package interfaces;
 public class Interfaces
 {
 	private Login loginInterface;
-	private CreateAcc createAccInterface;
-	
+	//private Choose
 	
 	// Login objects
 	
 	public Interfaces()
 	{
 		loginInterface = new Login();
-		createAccInterface = new CreateAcc();
 	}
 	
 	public void controlaInterfaces()
@@ -33,15 +31,5 @@ public class Interfaces
 	public Login getLoginUI()
 	{
 		return loginInterface;
-	}
-	
-	public CreateAcc getCreateAccInterface()
-	{
-		return createAccInterface;
-	}
-	
-	public void doStuff(){
-		this.loginInterface.setVisible(false);
-		this.createAccInterface.setVisible(true);
 	}
 }

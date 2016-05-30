@@ -13,7 +13,7 @@ public class Main {
 		
 		cl = new HttpClnt();
 		
-		cl.addInterface(intf);
+		//cl.addInterface(intf);
 		
 		intf.controlaInterfaces();
 	}

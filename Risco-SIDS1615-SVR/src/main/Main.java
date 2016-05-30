@@ -10,20 +10,18 @@ public class Main
 	public static Db db;
 	
 	public static void main(String[] args) 
-	{	
-		//if(args[0])
-		//inicia server HTTP
+	{
+		RoomManager manager = new RoomManager(); 
+		User userThread = new User();
+		
 		http = new HttpSvr(8083);		
 		http.initServer();
-		
-		User userThread = new User();
-		Room jogo = new Room("private");
 		
 		db = new Db();
 		db.startDb();
 		
 		// atribuir contexto ao servidor HTTP
-		http.addContext("/jogo/" + Long.toString(jogo.getID()), jogo);
+		http.addContext("/game", manager);
 		http.addContext("/user", userThread);
 		
 	}

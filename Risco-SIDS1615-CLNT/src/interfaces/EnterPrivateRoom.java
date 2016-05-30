@@ -3,7 +3,6 @@ package interfaces;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -22,19 +21,21 @@ import javax.swing.border.EmptyBorder;
 import main.Main;
 import utils.Utils;
 
-public class CreateAcc extends JFrame {
+@SuppressWarnings("serial")
+public class EnterPrivateRoom extends JFrame {
 
 	private JPanel contentPane;
-	private JTextField emailField;
-	private JTextField usernameField;
+	private JTextField roomIdField;
 	private JPasswordField passwordField;
 
-	public Login loginUI;
-	
+	private ChooseRoom chooseRoom;
+
+
 	/**
 	 * Create the frame.
 	 */
-	public CreateAcc() {
+	public EnterPrivateRoom()
+	{		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1024, 768);
 		contentPane = new JPanel();
@@ -53,47 +54,46 @@ public class CreateAcc extends JFrame {
 		panel.add(panel_1);
 		panel_1.setLayout(null);
 		
-		JLabel label = new JLabel("Enter your account information");
+		JLabel label = new JLabel("Enter room id and password");
 		label.setBounds(10, 5, 273, 32);
 		label.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		panel_1.add(label);
 		
-		emailField = new JTextField();
-		emailField.setBounds(23, 50, 397, 32);
-		panel_1.add(emailField);
-		emailField.setColumns(10);
+		roomIdField = new JTextField();
+		roomIdField.setBounds(23, 73, 397, 32);
+		panel_1.add(roomIdField);
 		
-		usernameField = new JTextField();
-		usernameField.setBounds(23, 99, 397, 32);
-		panel_1.add(usernameField);
-		
-		// botao login
-		JButton btnLogin = new JButton("Save");
+		JButton btnLogin = new JButton("Enter");
 		btnLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) 
 			{
-				performRegister();
-			}
-			
+				performEnter();
+			}			
 		});
 		btnLogin.setBounds(331, 195, 89, 23);
 		panel_1.add(btnLogin);
-				
-		JLabel lblEmail = new JLabel("Email:");
-		lblEmail.setBounds(33, 33, 65, 14);
-		panel_1.add(lblEmail);
 		
-		JLabel lblUsername = new JLabel("Username:");
-		lblUsername.setBounds(33, 83, 65, 14);
+		JLabel lblUsername = new JLabel("Room ID:");
+		lblUsername.setBounds(33, 48, 65, 14);
 		panel_1.add(lblUsername);
 		
 		JLabel lblPassword = new JLabel("Password:");
-		lblPassword.setBounds(33, 137, 65, 14);
+		lblPassword.setBounds(33, 116, 65, 14);
 		panel_1.add(lblPassword);
 		
 		passwordField = new JPasswordField();
-		passwordField.setBounds(23, 150, 397, 32);
+		passwordField.setBounds(23, 141, 397, 32);
 		panel_1.add(passwordField);
+		
+		JButton button = new JButton("Cancel");
+		button.setBounds(23, 195, 89, 23);
+		button.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) 
+			{
+				returnChooseRoom(e);
+			}			
+		});
+		panel_1.add(button);
 		
 		JPanel panel_2 = new JPanel();
 		panel_2.setBounds(0, 0, 998, 123);
@@ -113,7 +113,7 @@ public class CreateAcc extends JFrame {
 		panel_4.setBounds(10, 77, 425, 35);
 		panel_2.add(panel_4);
 		
-		JLabel lblPleaseLoginBelow = new JLabel("Create your account here");
+		JLabel lblPleaseLoginBelow = new JLabel("Enter private room");
 		panel_4.add(lblPleaseLoginBelow);
 		lblPleaseLoginBelow.setHorizontalAlignment(SwingConstants.CENTER);
 		lblPleaseLoginBelow.setFont(new Font("Tahoma", Font.PLAIN, 20));
@@ -133,33 +133,38 @@ public class CreateAcc extends JFrame {
 		panel.add(background);
 	}
 	
-	public void performRegister()
+	public void performEnter()
 	{
 		String result = null;
-		String usr = usernameField.getText();
+		String roomid = roomIdField.getText();
 		String password = new String(passwordField.getPassword());
-		String email = emailField.getText();
 		
 		password = Utils.encrypt(password);
-
+		
 		try
 		{
-			result = Main.cl.httpReq("/user?action=register&username=" + usr + "&password=" + password + "&email=" + email);
+			result = Main.cl.httpReq("/game?action=join&user=" + usr + "&type=private&id=" + roomid + "&password=" + password);
 		}
 		catch (IOException e1)
 		{
 			e1.printStackTrace();
 		}
 		
+		//ajustar resultado
 		if(result.equals("OK"))
 		{
 			this.dispose();
-			loginUI.setVisible(true);
 		}
 	}
-
-	public void setLoginUI(Login ui)
+	
+	public void setChooseRoom(ChooseRoom cr)
 	{
-		this.loginUI = ui;
+		this.chooseRoom = cr;
+	}
+	
+	public void returnChooseRoom(ActionEvent e) 
+	{
+		chooseRoom.setVisible(true);
+		this.dispose();
 	}
 }

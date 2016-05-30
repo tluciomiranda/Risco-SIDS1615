@@ -23,7 +23,7 @@ public class HttpClnt
 		{
 			response = inputLine;
 			if(response.equals("OK")){
-				inter.getLoginUI().dosss2();
+				//inter.getLoginUI().dosss2();
 			}
 			
 		}
