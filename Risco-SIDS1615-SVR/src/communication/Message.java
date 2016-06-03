@@ -1,4 +1,4 @@
-package utils;
+package communication;
 
 import java.io.Serializable;
 import java.sql.ResultSet;
@@ -20,10 +20,15 @@ public class Message implements Serializable {
 	
 	public ArrayList<dbLine> rs = new ArrayList<dbLine>();
 	public ArrayList<ServerInfo> serversArray = new ArrayList<ServerInfo>();
+	
 	String senderIp;
 	String receiverIp;
 	int senderTcpPort;
 	int receiverTcpPort;
+	
+	public Message(){
+		
+	}
 	
 	public Message(int v, String s){
 		this.value = v;
@@ -73,6 +78,10 @@ public class Message implements Serializable {
 	
 	public String getHeader(){
 		return this.header;
+	}
+	
+	public void setHeader(String header){
+		this.header = header;
 	}
 	
 	public void addServerInfo(ServerInfo si){

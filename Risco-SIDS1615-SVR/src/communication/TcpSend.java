@@ -3,9 +3,6 @@ package communication;
 import java.net.*;
 import java.io.*;
 
-
-import utils.Message;
-
 public class TcpSend extends Thread{
 	private Message message;
 	

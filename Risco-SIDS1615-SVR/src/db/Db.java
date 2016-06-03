@@ -155,6 +155,49 @@ public class Db {
 		return result;
 	}
 	
+	
+	public ArrayList<dbLine> getAllRecords(){
+		
+		ArrayList<dbLine> result = new ArrayList<dbLine>();
+			
+		Connection c = null;
+	    Statement stmt = null;
+	    try {
+	      Class.forName("org.sqlite.JDBC");
+	      c = DriverManager.getConnection("jdbc:sqlite:risk.db");
+	      c.setAutoCommit(false);
+	      
+	
+	      stmt = c.createStatement();
+	   
+	      ResultSet rs = stmt.executeQuery( "SELECT * FROM USER ;" );
+	      
+	      while(rs.next()){
+	    	  int rowid = rs.getInt("ROWID");
+	    	  String user = rs.getString("USERNAME");
+	    	  String user2 = rs.getString("USERNAMELOWER");
+	    	  String email = rs.getString("EMAIL");
+	    	  String password = rs.getString("Password");
+	    	  String updatetime = rs.getString("updatetime");
+	    	  
+	    	  
+	    	  
+	    	  dbLine dbl = new dbLine(rowid,user,user2,email,password,updatetime);
+	    	  result.add(dbl);
+	      }
+      
+      
+      rs.close();
+      stmt.close();
+      c.close();
+    } catch ( Exception e ) {
+      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+      System.exit(0);
+    }
+		
+		return result;
+	}
+	
 public ArrayList<dbLine> getRecordsByDate(String date){
 	
 	ArrayList<dbLine> result = new ArrayList<dbLine>();
@@ -170,7 +213,7 @@ public ArrayList<dbLine> getRecordsByDate(String date){
       stmt = c.createStatement();
    
       ResultSet rs = stmt.executeQuery( "SELECT * FROM USER WHERE updatetime > '"+date+"';" );
-      int i = 0;
+      
       while(rs.next()){
     	  int rowid = rs.getInt("ROWID");
     	  String user = rs.getString("USERNAME");
@@ -183,7 +226,7 @@ public ArrayList<dbLine> getRecordsByDate(String date){
     	  
     	  dbLine dbl = new dbLine(rowid,user,user2,email,password,updatetime);
     	  result.add(dbl);
-    	  ++i;
+    	 
       }
       
       

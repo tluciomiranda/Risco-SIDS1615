@@ -2,6 +2,7 @@ package protocols;
 
 import java.util.ArrayList;
 
+import communication.Message;
 import db.*;
 import utils.*;
 

@@ -1,7 +1,16 @@
 package communication;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.Locale;
 import java.util.Queue;
+
+
 
 import db.*;
 import utils.*;
@@ -31,7 +40,7 @@ public class tcpHandler extends Thread {
 		while(running){
 			
 			if(!waitList.isEmpty()){
-				System.out.println("GOT MESSAGE");
+				
 				Message m = waitList.remove();
 				if(m.getHeader().equals("POST newsrv")){
 					
@@ -49,8 +58,54 @@ public class tcpHandler extends Thread {
 				else if(m.getHeader().equals("POST srvsinfo")){
 					Utils.So("SERVER CONNECTED");
 				}
-				else if(m.getHeader().equals("GET Database")){
+				else if(m.getHeader().equals("GET databaseDate")){
 					ArrayList<dbLine> records;
+					String last = db.getLastRecordDate();
+					
+					Message reply = new Message();
+					reply.addReceiverIp(m.getSenderIp());
+					reply.addServersInfo(this.svsi.getServers());
+					reply.addSenderIp(this.si.getLocalIp());
+					reply.addReceiverTcpPort(m.getSenderTcpPort());
+					reply.addSenderTcpPort(si.getLocalPort());
+					
+					String header;
+					if(!m.getHeader().equals("NULL") && !last.equals("NULL")){
+						
+						if(m.getHeader().equals("NULL") && !last.equals("NULL")){
+							
+							records = db.getAllRecords();
+							reply.addDb(records);
+							header = "POST records_no_reply";
+						}
+						else if(!m.getHeader().equals("NULL") && last.equals("NULL")){
+							
+							header = "POST records_reply_all";
+						}
+						else{
+							
+							String dP = db.getLastRecordDate();
+							DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:SS:ss");
+							Date datePeer;
+							try {
+								datePeer = format.parse(m.getLastdb());
+								Date dateMediator = format.parse(dP);
+								if(dateMediator.compareTo(datePeer)<0){
+									header= "GET databaseDate";
+									reply.addLastDb(dP);
+								}
+							} catch (ParseException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}
+						
+						
+						TcpSend ts = new TcpSend(reply);
+						ts.start();
+					
+					}
+					
 				}
 				else if(m.getHeader().equals("POST srvsinfo")){
 					this.svsi.replaceServersInfo(m.getServersInfo());
