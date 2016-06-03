@@ -24,7 +24,6 @@ public class tcpHandler extends Thread {
 	
 	
 	public void run() {
-		
 		boolean running = true;
 		while(running){
 			
@@ -32,7 +31,7 @@ public class tcpHandler extends Thread {
 				System.out.println("NOT EMPTY");
 				Message m = waitList.remove();
 				if(m.value==1){
-					new saveDbProtocol(m, db).start();
+					new SaveDbProtocol(m, db).start();
 				}
 				if(m.value==2){
 					String last = db.getLastRecordDate();

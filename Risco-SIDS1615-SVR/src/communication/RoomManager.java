@@ -1,4 +1,4 @@
-package game;
+package communication;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -6,7 +6,7 @@ import java.util.*;
 
 import com.sun.net.httpserver.*;
 
-import communication.HttpSvr;
+import game.Room;
 import main.Main;
 
 public class RoomManager implements HttpHandler 

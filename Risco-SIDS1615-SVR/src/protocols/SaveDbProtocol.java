@@ -5,12 +5,12 @@ import java.util.ArrayList;
 import db.*;
 import utils.*;
 
-public class saveDbProtocol extends Thread{
+public class SaveDbProtocol extends Thread{
 	
 	private Message message;
 	private Db db;
 	
-	public saveDbProtocol(Message m, Db db){
+	public SaveDbProtocol(Message m, Db db){
 		this.db = db;
 		this.message = m;
 	}
@@ -36,10 +36,7 @@ public class saveDbProtocol extends Thread{
 				 db.createRecord(username, username2, email, password, updatetime);
 			 }
 			
-		}
-		
-		
-		
+		}	
 		
 	}
 

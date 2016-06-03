@@ -5,13 +5,17 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 import db.Db;
-import utils.Message;
+import protocols.StartupProtocol;
+import utils.*;
 
 public class TCPServer extends Thread{
 	
 	private Db db;
 	private int tcpPort;
 	private String localIp;
+	private String mediatorIp;
+	private int mediatorTcpPort;
+	private boolean isMediator = false;
 	
 	public TCPServer(Db db, String localIp, int tcpPort){
 		this.db = db;
@@ -24,6 +28,11 @@ public class TCPServer extends Thread{
 		System.out.println(this.localIp);
 		tcpHandler th= new tcpHandler(this.db, this.localIp);
 		th.start();
+		
+		if(!this.isMediator){
+			StartupProtocol sp = new StartupProtocol();
+			sp.start();
+		}
 		
 		try {  
 		    ServerSocket ss = new ServerSocket(this.tcpPort); 
@@ -54,4 +63,15 @@ public class TCPServer extends Thread{
 			System.out.println(e);
 			e.printStackTrace();}  
 		}
+	
+	public void addMediator(String mediatorIp, int mediatorPort){
+		 this.mediatorIp = mediatorIp;
+		 this.mediatorTcpPort = mediatorPort;
+		 
+		 if(mediatorIp.equals(this.localIp)){
+			 this.isMediator = true;
+			 Utils.So("I am the boss");
+		 }
+		 
+	 }
 }

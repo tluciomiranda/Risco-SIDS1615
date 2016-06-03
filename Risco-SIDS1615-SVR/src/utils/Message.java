@@ -13,6 +13,7 @@ public class Message implements Serializable {
 	private static final long serialVersionUID = 1L;
 	public int value;
 	public String id;
+	public String header;
 	public ArrayList<dbLine> rs = new ArrayList<dbLine>();
 	String senderIp;
 	String receiverIp;

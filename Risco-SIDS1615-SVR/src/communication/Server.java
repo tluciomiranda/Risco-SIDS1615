@@ -1,15 +1,19 @@
 package communication;
 
 import db.Db;
-import game.RoomManager;
 
 
 
 public class Server {
 	
 	private Db db;
+	
 	private String ip;
 	private int tcpPort;
+	private String mediatorIp;
+	private int mediatorTcpPort;
+	boolean isMediator = false;
+	
 	public static HttpSvr http;
 	
 	public Server(String ip,int tcpPort){
@@ -18,7 +22,7 @@ public class Server {
 		this.ip = ip;
 	}
 		
-	 public void go() { 
+	 public void go(String mediatorIp,int mediatorPort) { 
 		 System.out.println("Starting Server");
 		 
 		 this.db = new Db();
@@ -37,7 +41,9 @@ public class Server {
 		 
 		 	 
 		 TCPServer tcpServer = new TCPServer(this.db, this.ip,this.tcpPort);
+		 tcpServer.addMediator(mediatorIp,mediatorPort);
 		 tcpServer.start();
 		 
 	 }
+	 
 }

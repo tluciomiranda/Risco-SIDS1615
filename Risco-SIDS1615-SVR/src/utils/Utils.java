@@ -7,5 +7,8 @@ public class Utils {
 		return org.apache.commons.codec.digest.DigestUtils.sha256Hex(enter);
 		
 	}
-
+	
+	public static void So(Object obj){
+		System.out.println(obj);
+	}
 }
