@@ -35,6 +35,7 @@ public class tcpHandler extends Thread {
 				Message m = waitList.remove();
 				if(m.getHeader().equals("POST newsrv")){
 					
+					Utils.So("new POST newsrv");
 					this.svsi.addServerInfo(m.getServerInfo());
 					//reply
 					Message reply = new Message("POST srvsinfo");

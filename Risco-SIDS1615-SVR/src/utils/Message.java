@@ -22,6 +22,8 @@ public class Message implements Serializable {
 	public ArrayList<ServerInfo> serversArray = new ArrayList<ServerInfo>();
 	String senderIp;
 	String receiverIp;
+	int senderTcpPort;
+	int receiverTcpPort;
 	
 	public Message(int v, String s){
 		this.value = v;
@@ -88,6 +90,31 @@ public class Message implements Serializable {
 	public ArrayList<ServerInfo> getServersInfo(){
 		return this.serversArray;
 	}
+	
+	public void addReceiverTcpPort(int tcp){
+		this.receiverTcpPort = tcp;
+	}
+	
+	public int getReceiverTcpPort(){
+		return this.receiverTcpPort;
+	}
+	
+	public void addSenderTcpPort(int tcp){
+		this.senderTcpPort = tcp;
+	}
+	
+	public int getSenderTcpPort(){
+		return this.senderTcpPort;
+	}
+	
+	public void setComunication(String senderIp, int senderTcp, String receiverIp, int receiverTcp){
+		this.senderIp = senderIp;
+		this.senderTcpPort = senderTcp;
+		this.receiverIp = receiverIp;
+		this.receiverTcpPort = receiverTcp;
+	}
+	
+	
 	
 	
 }

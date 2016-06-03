@@ -72,7 +72,7 @@ public class TCPServer extends Thread{
 		 this.mediatorIp = mediatorIp;
 		 this.mediatorTcpPort = mediatorPort;
 		 
-		 if(mediatorIp.equals(this.localIp)){
+		 if(mediatorIp.equals(this.localIp)&& mediatorPort==this.tcpPort){
 			 this.isMediator = true;
 			 Utils.So("I am the boss");
 		 } 

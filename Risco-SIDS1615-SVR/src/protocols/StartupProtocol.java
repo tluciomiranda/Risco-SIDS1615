@@ -22,6 +22,8 @@ public class StartupProtocol extends Thread{
 		reply.addReceiverIp(this.si.getMediatorIp());
 		reply.addSenderIp(this.si.getLocalIp());
 		reply.addServerInfo(si);
+		reply.addSenderTcpPort(si.getLocalPort());
+		reply.addReceiverTcpPort(si.getMediatorPort());
 		TcpSend ts = new TcpSend(reply);
 		ts.start();
 		

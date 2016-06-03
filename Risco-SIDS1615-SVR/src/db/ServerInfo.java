@@ -20,7 +20,7 @@ public class ServerInfo implements Serializable{
 		this.mediatorIp = mIp;
 		this.mediatorTcpPort = mPort;
 		
-		if(this.localIp == this.mediatorIp){
+		if(this.localIp == this.mediatorIp && this.tcpPort == this.mediatorTcpPort){
 			this.amMediator = true;
 		}
 	}

@@ -17,7 +17,7 @@ public class TcpSend extends Thread{
 		
 		try{
 			Socket s = new Socket();
-			s.connect(new InetSocketAddress(this.message.getReceiverIp(),2000), 10000);
+			s.connect(new InetSocketAddress(this.message.getReceiverIp(),this.message.getReceiverTcpPort()), 10000);
 			
 			OutputStream os = s.getOutputStream();
 			ObjectOutputStream oos = new ObjectOutputStream(os);
