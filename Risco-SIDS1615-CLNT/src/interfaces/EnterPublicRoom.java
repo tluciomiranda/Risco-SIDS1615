@@ -46,6 +46,16 @@ public class EnterPublicRoom extends JFrame {
 		contentPane.add(panel, BorderLayout.CENTER);
 		panel.setLayout(null);
 		
+		JButton button = new JButton("Cancel");
+		button.setBounds(0, 677, 94, 34);
+		panel.add(button);
+		button.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) 
+			{
+				returnChooseRoom(e);
+			}			
+		});
+		
 		JPanel panel_1 = new JPanel();
 		panel_1.setBounds(50, 172, 905, 450);
 		panel.add(panel_1);
@@ -56,6 +66,25 @@ public class EnterPublicRoom extends JFrame {
 		label.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		panel_1.add(label);
 		
+		JLabel lblRoomId = new JLabel("Room ID");
+		lblRoomId.setBounds(20, 48, 46, 14);
+		panel_1.add(lblRoomId);
+		
+		JLabel label_1 = new JLabel("Players");
+		label_1.setBounds(646, 48, 64, 14);
+		panel_1.add(label_1);
+		
+		JLabel label_2 = new JLabel("Maximum");
+		label_2.setBounds(720, 48, 111, 14);
+		panel_1.add(label_2);
+		
+		JPanel panel_5 = new JPanel();
+		panel_5.setBackground(Color.WHITE);
+		panel_5.setBounds(10, 73, 885, 332);
+		panel_1.add(panel_5);
+		panel_5.setLayout(null);
+		
+		
 		// botao login
 		JButton btnLogin = new JButton("Check");
 		btnLogin.addActionListener(new ActionListener() {
@@ -63,6 +92,7 @@ public class EnterPublicRoom extends JFrame {
 			{
 				ArrayList<String[]> availableRooms = new ArrayList<String[]>();
 				availableRooms = getAvailableRooms();
+				int pos = 11;
 				
 				if(availableRooms != null)
 				{
@@ -72,41 +102,46 @@ public class EnterPublicRoom extends JFrame {
 						String actual = availableRooms.get(i)[1];
 						String maxPlayers = availableRooms.get(i)[2];
 						
+						JPanel panel_6 = new JPanel();
+						panel_6.setBounds(10, pos, 865, 32);
+						panel_5.add(panel_6);
+						panel_6.setLayout(null);
+						
+						JLabel lblNewLabel = new JLabel(id);
+						lblNewLabel.setBounds(10, 0, 561, 32);
+						panel_6.add(lblNewLabel);
+						
+						JLabel lblNewLabel_1 = new JLabel(actual);
+						lblNewLabel_1.setBounds(612, 0, 51, 32);
+						panel_6.add(lblNewLabel_1);
+						
+						JLabel lblNewLabel_2 = new JLabel(maxPlayers);
+						lblNewLabel_2.setBounds(689, 0, 51, 32);
+						panel_6.add(lblNewLabel_2);
+						
+						JButton btnJoinThis = new JButton("Join This");
+						btnJoinThis.addActionListener(new ActionListener()
+						{
+							public void actionPerformed(ActionEvent arg0)
+							{
+								performEnter(Long.parseLong(id));
+							}
+						});
+						btnJoinThis.setBounds(766, 0, 89, 32);
+						panel_6.add(btnJoinThis);
+						
+						repaint();
+						
 						System.out.println("Room: " + id + " nrPlayers: " + actual + " maxPlayers: " + maxPlayers);
+						
+						pos += 40;
 					}
 				}
 			}			
 		});
 		btnLogin.setBounds(806, 416, 89, 23);
 		panel_1.add(btnLogin);
-		
-		JButton button = new JButton("Cancel");
-		button.setBounds(10, 416, 89, 23);
-		button.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) 
-			{
-				returnChooseRoom(e);
-			}			
-		});
-		panel_1.add(button);
-		
-		JLabel lblRoomId = new JLabel("Room ID");
-		lblRoomId.setBounds(20, 48, 46, 14);
-		panel_1.add(lblRoomId);
-		
-		JLabel label_1 = new JLabel("Players");
-		label_1.setBounds(646, 48, 46, 14);
-		panel_1.add(label_1);
-		
-		JLabel label_2 = new JLabel("Maximum");
-		label_2.setBounds(720, 48, 46, 14);
-		panel_1.add(label_2);
-		
-		JPanel panel_5 = new JPanel();
-		panel_5.setBackground(Color.WHITE);
-		panel_5.setBounds(10, 73, 885, 332);
-		panel_1.add(panel_5);
-		
+					
 		JPanel panel_2 = new JPanel();
 		panel_2.setBounds(0, 0, 998, 123);
 		panel.add(panel_2);
@@ -145,14 +180,13 @@ public class EnterPublicRoom extends JFrame {
 		panel.add(background);
 	}
 	
-	public void performEnter()
+	public void performEnter(long roomid)
 	{
 		String result = null;
-		int usr = Main.userID;
 		
 		try
 		{
-			result = Main.cl.httpReq("/game?action=join&user=" + usr + "&type=public&id="/* + roomid*/);
+			result = Main.cl.httpReq("/game?action=join&type=public&id=" + roomid);
 		}
 		catch (IOException e1)
 		{
