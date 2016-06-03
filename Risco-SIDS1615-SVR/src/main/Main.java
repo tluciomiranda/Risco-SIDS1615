@@ -2,6 +2,7 @@ package main;
 
 import communication.*;
 import db.Db;
+import game.RoomManager;
 
 public class Main
 {

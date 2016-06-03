@@ -1,4 +1,4 @@
-package main;
+package game;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -6,8 +6,12 @@ import java.util.*;
 
 import com.sun.net.httpserver.*;
 
+import main.Main;
+
 public class RoomManager implements HttpHandler 
 {
+	ArrayList<Room> rooms;
+	
 	public RoomManager()
 	{
 		
@@ -38,7 +42,7 @@ public class RoomManager implements HttpHandler
             t.sendResponseHeaders(200, response.length());
             OutputStream os = t.getResponseBody();
             os.write(response.getBytes());
-            os.close();		
+            os.close();
 		}
     }
     
@@ -50,11 +54,18 @@ public class RoomManager implements HttpHandler
     	
     	if(type.equals("private"))
     	{
-    		String pw = params.get("password");
-    		
     		//criar sala privada
     		
-    		String response = "reposta";
+    		String pw = params.get("password");
+    		
+    		long id = new Date().getTime();    				
+    		Room r1 = new Room(id, "privada", pw, Integer.parseInt(maxPlayers), Integer.parseInt(userID));
+    		
+    		rooms.add(r1);
+    		
+    		Main.http.addContext("/room/" + id, r1);
+    		
+    		String response = "ID=" + id;
  	        exc.sendResponseHeaders(200, response.length());
  	        OutputStream os = exc.getResponseBody();
  	        os.write(response.getBytes());
@@ -64,7 +75,14 @@ public class RoomManager implements HttpHandler
     	{
     		//criar sala publica
     		
-    		String response = "reposta";
+    		long id = new Date().getTime();    				
+    		Room r1 = new Room(id, "publica", Integer.parseInt(maxPlayers), Integer.parseInt(userID));
+    		
+    		rooms.add(r1);
+    		
+    		Main.http.addContext("/room/" + id, r1);
+    		
+    		String response = "ID=" + id;
  	        exc.sendResponseHeaders(200, response.length());
  	        OutputStream os = exc.getResponseBody();
  	        os.write(response.getBytes());
@@ -72,6 +90,7 @@ public class RoomManager implements HttpHandler
     	}
     }
     
+    // acho que isto nao fica aqui...
     private void doJoinRoom(Map <String, String> params, HttpExchange exc) throws IOException
     {
     	String type = params.get("type");

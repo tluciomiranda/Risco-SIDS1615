@@ -14,7 +14,7 @@ public class User extends Thread implements HttpHandler
 	public void handle(HttpExchange t) throws IOException 
     {
 		String query = t.getRequestURI().getQuery();
-		System.out.println("got query   " + query);
+
     	if(query != null)
     	{
     		Map <String,String> params = Main.http.queryToMap(query);
@@ -54,8 +54,7 @@ public class User extends Thread implements HttpHandler
 	{
 		String username = params.get("username");
 		String password = params.get("password");
-		
-		System.out.println("beforee loginUser");
+
 		int userid = Main.db.loginUser(username, password);
 		
 		if(userid > 0)		
