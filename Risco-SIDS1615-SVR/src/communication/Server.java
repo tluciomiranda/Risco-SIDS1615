@@ -1,10 +1,6 @@
 package communication;
 
 import db.Db;
-import game.UserManager;
-import utils.Utils;
-
-
 
 public class Server {
 	
@@ -26,30 +22,26 @@ public class Server {
 		this.httpPort = httpPort;
 	}
 		
-	 public void go(String mediatorIp,int mediatorPort) { 
+	 public void go(String mediatorIp,int mediatorPort){ 
 		 System.out.println("Starting Server");
 		 
 		 db = new Db();
-		 db.startDb();	  
-		 
+		 db.startDb();		 
 		
 		 UserManager umanager = new UserManager(http);		 
 		 RoomManager rmanager = new RoomManager(http);
 		 http = new HttpSvr(httpPort);
-		 http.initServer();
-		
+		 http.initServer();		
 		
 		 // atribuir contexto ao servidor HTTP
 		 http.addContext("/game", rmanager);
-		 http.addContext("/user", umanager);
-		 
+		 http.addContext("/user", umanager);		 
 		 	 
-		 TCPServer tcpServer = new TCPServer(this.db, this.ip,this.tcpPort);
+		 TCPServer tcpServer = new TCPServer(db, ip, tcpPort);
 		 tcpServer.addMediator(mediatorIp,mediatorPort);
 		 tcpServer.setServerInfo();
 		 
-		 tcpServer.start();
-		 
+		 tcpServer.start();		 
 	 }
 	 
 }

@@ -37,13 +37,14 @@ public class HttpSvr {
 	
 	public Map<String, String> queryToMap(String query)
 	{
+		System.out.println("passes!");
 	    Map<String, String> result = new HashMap<String, String>();
 	    
 	    for (String param : query.split("&")) 
 	    {
 	        String pair[] = param.split("=");
 	        
-	        if(pair.length > 1) 
+	        if(pair.length > 1)
 	        {
 	            result.put(pair[0], pair[1]);
 	        }
@@ -54,5 +55,5 @@ public class HttpSvr {
 	    }
 	    
 	    return result;
-	  }
+	}
 }

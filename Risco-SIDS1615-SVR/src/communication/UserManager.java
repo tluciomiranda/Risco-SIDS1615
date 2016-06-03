@@ -1,15 +1,12 @@
-package game;
+package communication;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.*;
-import java.util.concurrent.LinkedBlockingQueue;
+import java.util.HashMap;
+import java.util.Map;
 
-import com.sun.net.httpserver.*;
-
-import communication.HttpSvr;
-import communication.Server;
-import main.Main;
+import com.sun.net.httpserver.HttpExchange;
+import com.sun.net.httpserver.HttpHandler;
 
 public class UserManager extends Thread implements HttpHandler
 {
@@ -23,13 +20,28 @@ public class UserManager extends Thread implements HttpHandler
 	public void handle(HttpExchange t) throws IOException 
     {
 		String query = t.getRequestURI().getQuery();
-
+		
+	    System.out.println(query);
     	if(query != null)
     	{
-    		Map <String,String> params = http.queryToMap(query);
-	        
+    		 Map<String, String> params = new HashMap<String, String>();
+    		
+    		for (String param : query.split("&")) 
+		    {
+		        String pair[] = param.split("=");
+		        
+		        if(pair.length > 1)
+		        {
+		        	params.put(pair[0], pair[1]);
+		        }
+		        else
+		        {
+		        	params.put(pair[0], "");
+		        }
+		    }
+    		 
 	        switch (params.get("action"))
-	        {
+	        {			
 	        	case "login":
 	        		doLogin(params, t);
 	        		break;
@@ -65,13 +77,14 @@ public class UserManager extends Thread implements HttpHandler
 		String password = params.get("password");
 
 		boolean userid = Server.db.loginUser(username, password);
+		System.out.println("user manager login");
 		
 		if(userid)		
 		{
 			try 
     		{
 				System.out.println("RESPONDE OK");
-    			String response = "" + userid;
+    			String response = "OK";
     			
 				exc.sendResponseHeaders(200, response.length());						
 		        OutputStream os = exc.getResponseBody();
@@ -107,8 +120,8 @@ public class UserManager extends Thread implements HttpHandler
 		String username = params.get("username");
 		String password = params.get("password");
 		String email = params.get("email");
-		
-		System.out.println("beforee registerUser");
+
+		System.out.println("user manager create");
 		if(Server.db.registerUser(username, email, password))		
 		{
 			try 
