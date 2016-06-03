@@ -10,12 +10,15 @@ import protocols.*;
 public class tcpHandler extends Thread {
 	private Db db;
 	private String localIp;
+	private ServerInfo si;
+	private ServersInfo svsi;
 	
 	private volatile Queue<Message> waitList= new LinkedList <Message>();
 	
-	public tcpHandler(Db db, String localIp){
+	public tcpHandler(Db db, String localIp, ServerInfo si){
 		this.db =db;
 		this.localIp = localIp;
+		this.si = si;
 	}
 	
 	public void addMessage(Message m){
@@ -30,16 +33,32 @@ public class tcpHandler extends Thread {
 			if(!waitList.isEmpty()){
 				System.out.println("NOT EMPTY");
 				Message m = waitList.remove();
-				if(m.value==1){
+				if(m.getHeader().equals("POST newsrv")){
+					this.svsi.addServerInfo(m.getServerInfo());
+					//reply
+					Message reply = new Message("POST srvsinfo");
+					reply.addReceiverIp(m.getSenderIp());
+					reply.addServersInfo(this.svsi.getServers());
+					reply.addSenderIp(this.si.getLocalIp());
+					TcpSend ts = new TcpSend(reply);
+					ts.start();
+				}
+				else if(m.getHeader().equals("GET Database")){
+					ArrayList<dbLine> records;
+				}
+				else if(m.getHeader().equals("POST srvsinfo")){
+					this.svsi.replaceServersInfo(m.getServersInfo());
+				}
+				else if(m.value==1){
 					new SaveDbProtocol(m, db).start();
 				}
-				if(m.value==2){
+				else if(m.value==2){
 					String last = db.getLastRecordDate();
 					Message reply = new Message(3,last);
 					TcpSend ts = new TcpSend(reply);
 					ts.start();
 				}
-				if(m.value==3){
+				else if(m.value==3){
 					ArrayList<dbLine> records = db.getRecordsByDate(m.id);
 					
 					Message reply = new Message(1,"save");

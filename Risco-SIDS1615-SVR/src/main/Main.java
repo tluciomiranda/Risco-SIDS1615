@@ -4,10 +4,6 @@ import communication.*;
 
 public class Main {
 	
-	
-	
-	
-	
 	 public static void main(String args[]) { 
 		 
 		 if(args.length != 4){
@@ -19,7 +15,7 @@ public class Main {
 		int port = Integer.parseInt(args[1]);
 		String ip = args[0];
 		int mediatorPort = Integer.parseInt(args[3]);
-		String mediatorIp = args[1];
+		String mediatorIp = args[2];
 		
 		
 		 Server sv = new Server(ip,port);

@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
+import db.ServerInfo;
 import db.dbLine;
 
 public class Message implements Serializable {
@@ -14,7 +15,11 @@ public class Message implements Serializable {
 	public int value;
 	public String id;
 	public String header;
+	public String lastDB;
+	public ServerInfo si;
+	
 	public ArrayList<dbLine> rs = new ArrayList<dbLine>();
+	public ArrayList<ServerInfo> serversArray = new ArrayList<ServerInfo>();
 	String senderIp;
 	String receiverIp;
 	
@@ -22,6 +27,11 @@ public class Message implements Serializable {
 		this.value = v;
 		this.id = s;
 		this.senderIp = "NULL";
+		
+	}
+	
+	public Message(String s){
+		this.header = s;
 		
 	}
 	
@@ -49,6 +59,34 @@ public class Message implements Serializable {
 	
 	public String getReceiverIp(){
 		return this.receiverIp;
+	}
+	
+	public void addLastDb(String bd){
+		this.lastDB = bd;
+	}
+	
+	public String getLastdb(){
+		return this.lastDB;
+	}
+	
+	public String getHeader(){
+		return this.header;
+	}
+	
+	public void addServerInfo(ServerInfo si){
+		this.si = si;
+	}
+	
+	public ServerInfo getServerInfo(){
+		return this.si;
+	}
+	
+	public void addServersInfo(ArrayList<ServerInfo> svsi){
+		this.serversArray = svsi;
+	}
+	
+	public ArrayList<ServerInfo> getServersInfo(){
+		return this.serversArray;
 	}
 	
 	
