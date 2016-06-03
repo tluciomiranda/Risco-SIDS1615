@@ -11,7 +11,6 @@ public class Main {
 			return;
 		}
 			
-			
 		int port = Integer.parseInt(args[1]);
 		String ip = args[0];
 		int mediatorPort = Integer.parseInt(args[3]);
@@ -19,9 +18,7 @@ public class Main {
 		int httpPort = Integer.parseInt(args[4]);
 		
 		
-		 Server sv = new Server(ip,port,httpPort);
-		 sv.go(mediatorIp,mediatorPort);
-		 
+		Server sv = new Server(ip,port,httpPort);
+		sv.go(mediatorIp,mediatorPort);		 
 	 }
-
 }
