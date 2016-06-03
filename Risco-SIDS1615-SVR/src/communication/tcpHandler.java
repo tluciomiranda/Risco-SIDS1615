@@ -69,24 +69,26 @@ public class tcpHandler extends Thread {
 					reply.addReceiverTcpPort(m.getSenderTcpPort());
 					reply.addSenderTcpPort(si.getLocalPort());
 					
-					String header;
-					if(!m.getHeader().equals("NULL") && !last.equals("NULL")){
+					
+					if(!m.getLastdb().equals("NULL") || !last.equals("NULL")){
+						String header;
 						
-						if(m.getHeader().equals("NULL") && !last.equals("NULL")){
-							
+						if(m.getLastdb().equals("NULL") && !last.equals("NULL")){
+							Utils.So("1");
 							records = db.getAllRecords();
 							reply.addDb(records);
 							header = "POST records_no_reply";
 						}
-						else if(!m.getHeader().equals("NULL") && last.equals("NULL")){
-							
+						else if(!m.getLastdb().equals("NULL") && last.equals("NULL")){
+							Utils.So("2");
 							header = "POST records_reply_all";
 						}
 						else{
-							
+							Utils.So("3");
 							String dP = db.getLastRecordDate();
 							DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:SS:ss");
 							Date datePeer;
+							header = "POST discard";
 							try {
 								datePeer = format.parse(m.getLastdb());
 								Date dateMediator = format.parse(dP);
@@ -100,7 +102,7 @@ public class tcpHandler extends Thread {
 							}
 						}
 						
-						
+						reply.setHeader(header);
 						TcpSend ts = new TcpSend(reply);
 						ts.start();
 					
@@ -110,7 +112,7 @@ public class tcpHandler extends Thread {
 				else if(m.getHeader().equals("POST srvsinfo")){
 					this.svsi.replaceServersInfo(m.getServersInfo());
 				}
-				else if(m.value==1){
+				else if(m.getHeader().equals("POST records_no_reply")){
 					new SaveDbProtocol(m, db).start();
 				}
 				else if(m.value==2){

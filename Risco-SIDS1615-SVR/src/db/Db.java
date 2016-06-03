@@ -127,7 +127,7 @@ public class Db {
 	
 	public String getLastRecordDate(){
 		
-		String result = "null";
+		String result = "NULL";
 		
 		Connection c = null;
 	    Statement stmt = null;
