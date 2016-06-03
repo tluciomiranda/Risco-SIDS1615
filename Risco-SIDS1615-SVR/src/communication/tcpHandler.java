@@ -11,7 +11,7 @@ public class tcpHandler extends Thread {
 	private Db db;
 	private String localIp;
 	private ServerInfo si;
-	private ServersInfo svsi;
+	private ServersInfo svsi = new ServersInfo();
 	
 	private volatile Queue<Message> waitList= new LinkedList <Message>();
 	
@@ -31,19 +31,23 @@ public class tcpHandler extends Thread {
 		while(running){
 			
 			if(!waitList.isEmpty()){
-				System.out.println("NOT EMPTY");
+				System.out.println("GOT MESSAGE");
 				Message m = waitList.remove();
 				if(m.getHeader().equals("POST newsrv")){
 					
-					Utils.So("new POST newsrv");
+					Utils.So(m.getHeader());
 					this.svsi.addServerInfo(m.getServerInfo());
-					//reply
 					Message reply = new Message("POST srvsinfo");
 					reply.addReceiverIp(m.getSenderIp());
 					reply.addServersInfo(this.svsi.getServers());
 					reply.addSenderIp(this.si.getLocalIp());
+					reply.addReceiverTcpPort(m.getSenderTcpPort());
+					reply.addSenderTcpPort(si.getLocalPort());
 					TcpSend ts = new TcpSend(reply);
 					ts.start();
+				}
+				else if(m.getHeader().equals("POST srvsinfo")){
+					Utils.So("SERVER CONNECTED");
 				}
 				else if(m.getHeader().equals("GET Database")){
 					ArrayList<dbLine> records;
