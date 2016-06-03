@@ -2,12 +2,8 @@ package game;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.Map;
-
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
-
-import main.Main;
 
 public class Room implements HttpHandler 
 {
@@ -16,23 +12,20 @@ public class Room implements HttpHandler
 	private String type;
 	private Game game;
 	private int maxPlayers;
-	private int createdBy;
 
-	public Room(long id, String type, int maxPlayers, int userID)
+	public Room(long id, String type, int maxPlayers)
 	{
 		this.id = id;
 		this.type = type;
 		this.maxPlayers = maxPlayers;
-		this.createdBy = userID;
 	}
 
-	public Room(long id, String type, String password, int maxPlayers, int userID)
+	public Room(long id, String type, String password, int maxPlayers)
 	{
 		this.id = id;
 		this.type = type;
 		this.password = password;
 		this.maxPlayers = maxPlayers;
-		this.createdBy = userID;
 	}
 	
 	public void handle(HttpExchange t) throws IOException 
@@ -79,5 +72,13 @@ public class Room implements HttpHandler
 	public Game getGame()
 	{
 		return game;
+	}
+
+	public boolean checkPassword(String pw) 
+	{
+		if(pw.equals(password))
+			return true;
+		
+		return false;
 	}
 }

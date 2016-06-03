@@ -105,12 +105,12 @@ public class Db {
 
 	      stmt = c.createStatement();
 	      
-	      ResultSet rs = stmt.executeQuery( "SELECT ROWID FROM USER WHERE USERNAMELOWER='"+username.toLowerCase()+"'"+
+	      ResultSet rs = stmt.executeQuery( "SELECT COUNT(*) AS CNT FROM USER WHERE USERNAMELOWER='"+username.toLowerCase()+"'"+
 	    	      " AND PASSWORD='"+password+"';" );
 	      
 	      
-	      if(rs.getInt("ROWID")>0){
-	    	  value = rs.getInt("ROWID");
+	      if(rs.getInt("CNT")>0){
+	    	  value = 1;
 	    	  System.out.println("Login Successful");
 	      }
 	      rs.close();

@@ -24,7 +24,7 @@ public class UserManager extends Thread implements HttpHandler
 	    System.out.println(query);
     	if(query != null)
     	{
-    		 Map<String, String> params = new HashMap<String, String>();
+    		Map<String, String> params = new HashMap<String, String>();
     		
     		for (String param : query.split("&")) 
 		    {
@@ -84,12 +84,12 @@ public class UserManager extends Thread implements HttpHandler
 			try 
     		{
 				System.out.println("RESPONDE OK");
-    			String response = "" + userid;
+    			String response = "OK";
     			
 				exc.sendResponseHeaders(200, response.length());						
 		        OutputStream os = exc.getResponseBody();
 		        os.write(response.getBytes());
-		        os.close();		        
+		        os.close();
 	        }
     		catch (IOException e)
     		{
