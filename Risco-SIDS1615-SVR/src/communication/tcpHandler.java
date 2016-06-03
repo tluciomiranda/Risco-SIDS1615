@@ -117,8 +117,7 @@ public class tcpHandler extends Thread {
 					this.svsi.replaceServersInfo(m.getServersInfo());
 				}
 				else if(m.getHeader().equals("POST records_no_reply")){
-					System.out.println("FDS");
-					System.out.println(m.getRs().size());
+					
 					new SaveDbProtocol(m, db).start();
 				}
 

@@ -196,6 +196,12 @@ public class EnterPublicRoom extends JFrame {
 		//ajustar resultado
 		if(result.equals("OK"))
 		{
+			try {
+				MainFrame frame = new MainFrame();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			this.dispose();
 		}
 	}

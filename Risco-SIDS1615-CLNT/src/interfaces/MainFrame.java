@@ -115,23 +115,4 @@ public class MainFrame extends JFrame{
 		
 		return false;
 	}
-	
-	
-	
-	//main
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					MainFrame frame = new MainFrame();
-					
-					
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-	
-
 }
