@@ -21,6 +21,7 @@ public class StartupProtocol extends Thread{
 		Message reply = new Message("POST newsrv");
 		reply.addReceiverIp(this.si.getMediatorIp());
 		reply.addSenderIp(this.si.getLocalIp());
+		reply.addServerInfo(si);
 		TcpSend ts = new TcpSend(reply);
 		ts.start();
 		

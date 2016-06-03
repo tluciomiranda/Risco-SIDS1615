@@ -1,6 +1,7 @@
 package communication;
 
 import db.Db;
+import utils.Utils;
 
 
 
@@ -43,6 +44,7 @@ public class Server {
 		 TCPServer tcpServer = new TCPServer(this.db, this.ip,this.tcpPort);
 		 tcpServer.addMediator(mediatorIp,mediatorPort);
 		 tcpServer.setServerInfo();
+		 
 		 tcpServer.start();
 		 
 	 }

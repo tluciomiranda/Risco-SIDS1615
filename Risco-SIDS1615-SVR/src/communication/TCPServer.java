@@ -79,7 +79,7 @@ public class TCPServer extends Thread{
 	 }
 	
 	public void setServerInfo(){
-		this.si = new ServerInfo(this.localIp, this.mediatorTcpPort,this.mediatorIp,this.mediatorTcpPort);
+		this.si = new ServerInfo(this.localIp, this.tcpPort,this.mediatorIp,this.mediatorTcpPort);
 		this.svsi = new ServersInfo();
 	}
 }

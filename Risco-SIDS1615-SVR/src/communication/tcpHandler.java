@@ -34,6 +34,7 @@ public class tcpHandler extends Thread {
 				System.out.println("NOT EMPTY");
 				Message m = waitList.remove();
 				if(m.getHeader().equals("POST newsrv")){
+					
 					this.svsi.addServerInfo(m.getServerInfo());
 					//reply
 					Message reply = new Message("POST srvsinfo");
