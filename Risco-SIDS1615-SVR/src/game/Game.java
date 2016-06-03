@@ -17,4 +17,9 @@ public class Game implements HttpHandler
 	{
 		
 	}
+	
+	public int getNrPlayers()
+	{
+		return 2; //alterar para calculo do nr de players actual
+	}
 }

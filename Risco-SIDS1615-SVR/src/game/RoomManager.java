@@ -10,7 +10,7 @@ import main.Main;
 
 public class RoomManager implements HttpHandler 
 {
-	ArrayList<Room> rooms;
+	private ArrayList<Room> rooms;
 	
 	public RoomManager()
 	{
@@ -33,6 +33,9 @@ public class RoomManager implements HttpHandler
 	        		break;
 	        	case "join":
 	        		doJoinRoom(params, t);
+	        		break;
+	        	case "getAvailable":
+	        		getAllPublicRooms(params, t);
 	        		break;
 	        }	
 	    }
@@ -88,6 +91,26 @@ public class RoomManager implements HttpHandler
  	        os.write(response.getBytes());
  	        os.close();
     	}
+    }
+    
+    public void getAllPublicRooms(Map <String, String> params, HttpExchange exc) throws IOException
+    {
+    	String userID = params.get("user");
+    	String response = "";
+    	
+    	for(int i = 0; i < rooms.size(); i++)
+		{
+			long id = rooms.get(i).getId();
+			int currentP = rooms.get(i).getGame().getNrPlayers();
+			int maxP = rooms.get(i).getMaxPlayers();
+			
+			response = response + id + ":" + currentP + ":" + maxP + ";";
+		}
+    	
+    	exc.sendResponseHeaders(200, response.length());
+        OutputStream os = exc.getResponseBody();
+        os.write(response.getBytes());
+        os.close();
     }
     
     // acho que isto nao fica aqui...

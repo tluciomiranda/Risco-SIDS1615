@@ -152,7 +152,7 @@ public class CreatePrivateRoom extends JFrame {
 		}
 		
 		//ajustar resultado
-		if(result.equals("OK"))
+		if(!result.equals("NOK"))
 		{
 			this.dispose();
 		}

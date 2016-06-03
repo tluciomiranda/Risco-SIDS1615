@@ -7,6 +7,7 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.util.*;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -16,6 +17,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
+import javafx.util.Pair;
 import main.Main;
 
 @SuppressWarnings("serial")
@@ -58,7 +60,14 @@ public class EnterPublicRoom extends JFrame {
 		btnLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) 
 			{
-				// fazer pedido para ver salas publicas disponiveis
+				ArrayList<String[]> availableRooms = getAvailableRooms();
+				
+				for(int i = 0; i < availableRooms.size(); i++)
+				{
+					String id = availableRooms.get(i)[0];
+					String actual = availableRooms.get(i)[1];
+					String available = availableRooms.get(i)[2];
+				}				
 			}			
 		});
 		btnLogin.setBounds(806, 416, 89, 23);
@@ -142,6 +151,44 @@ public class EnterPublicRoom extends JFrame {
 		if(result.equals("OK"))
 		{
 			this.dispose();
+		}
+	}
+	
+	public ArrayList<String[]> getAvailableRooms()
+	{
+		String result = null;
+		int usr = Main.userID;
+		
+		try
+		{
+			result = Main.cl.httpReq("/game?action=getAvailable&user=" + usr);
+		}
+		catch (IOException e1)
+		{
+			e1.printStackTrace();
+		}
+		
+		//ajustar resultado
+		if(!result.equals("!OK"))
+		{
+			ArrayList<String[]> rs = new ArrayList<String[]>();
+			
+			// processa resultado no formato IDRoom:nrPlayers:MaxPlayers;IDRoom:nrPlayers:MaxPlayers
+			
+			String[] roomData = result.split(";");
+			
+			for(int i = 0; i < roomData.length; i++)
+			{
+				rs.add(roomData[i].split(":")); 
+			}
+			
+			return rs;
+		}
+		else
+		{
+			//resposta feia
+			
+			return null;
 		}
 	}
 	

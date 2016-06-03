@@ -11,12 +11,12 @@ import main.Main;
 
 public class Room implements HttpHandler 
 {
-	long id;
-	String password;
-	String type;
-	Game game;
-	int maxPlayers;
-	int createdBy;
+	private long id;
+	private String password;
+	private String type;
+	private Game game;
+	private int maxPlayers;
+	private int createdBy;
 
 	public Room(long id, String type, int maxPlayers, int userID)
 	{
@@ -64,5 +64,20 @@ public class Room implements HttpHandler
 	public long getId()
 	{
 		return id;
+	}
+	
+	public String getType()
+	{
+		return type;
+	}
+	
+	public int getMaxPlayers()
+	{
+		return maxPlayers;
+	}
+	
+	public Game getGame()
+	{
+		return game;
 	}
 }
