@@ -6,15 +6,17 @@ import java.util.*;
 
 import com.sun.net.httpserver.*;
 
+import communication.HttpSvr;
 import main.Main;
 
 public class RoomManager implements HttpHandler 
 {
 	private ArrayList<Room> rooms;
+	private HttpSvr http;
 	
-	public RoomManager()
+	public RoomManager(HttpSvr http)
 	{
-		
+		this.http = http;
 	}
 	
     @Override
@@ -24,7 +26,7 @@ public class RoomManager implements HttpHandler
     	
     	if(query != null)
     	{
-    		Map <String,String> params = Main.http.queryToMap(t.getRequestURI().getQuery());
+    		Map <String,String> params = this.http.queryToMap(t.getRequestURI().getQuery());
 	        
 	        switch (params.get("action"))
 	        {
@@ -66,7 +68,7 @@ public class RoomManager implements HttpHandler
     		
     		rooms.add(r1);
     		
-    		Main.http.addContext("/room/" + id, r1);
+    		this.http.addContext("/room/" + id, r1);
     		
     		String response = "ID=" + id;
  	        exc.sendResponseHeaders(200, response.length());
@@ -83,7 +85,7 @@ public class RoomManager implements HttpHandler
     		
     		rooms.add(r1);
     		
-    		Main.http.addContext("/room/" + id, r1);
+    		this.http.addContext("/room/" + id, r1);
     		
     		String response = "ID=" + id;
  	        exc.sendResponseHeaders(200, response.length());

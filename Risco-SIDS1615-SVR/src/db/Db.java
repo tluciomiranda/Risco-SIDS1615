@@ -1,6 +1,8 @@
 package db;
 import java.io.File;
 import java.sql.*;
+import java.util.ArrayList;
+
 
 
 public class Db {
@@ -57,7 +59,6 @@ public class Db {
 				System.err.println( e.getClass().getName() + ": " + e.getMessage() );
 				System.exit(0);
 			}
-			System.out.println("Opened database successfully");
 		}
 	}
 	
@@ -71,7 +72,7 @@ public class Db {
 	      Class.forName("org.sqlite.JDBC");
 	      c = DriverManager.getConnection("jdbc:sqlite:risk.db");
 	      c.setAutoCommit(false);
-	      System.out.println("Opened database successfully");
+	      
 
 	      stmt = c.createStatement();
 	      String sql = "INSERT INTO USER (USERNAME, USERNAMELOWER,EMAIL,PASSWORD) " +
@@ -91,8 +92,8 @@ public class Db {
 	    return value;
 	}
 	
-	public int loginUser(String username, String password){
-		int value = 0;
+	public boolean loginUser(String username, String password){
+		boolean value = false;
 		
 		Connection c = null;
 	    Statement stmt = null;
@@ -100,16 +101,16 @@ public class Db {
 	      Class.forName("org.sqlite.JDBC");
 	      c = DriverManager.getConnection("jdbc:sqlite:risk.db");
 	      c.setAutoCommit(false);
-	      System.out.println("Opened database successfully");
+	      
 
 	      stmt = c.createStatement();
-	     // System.out.println("BEFORE");
-	      ResultSet rs = stmt.executeQuery( "SELECT ROWID AS CNT FROM USER WHERE USERNAMELOWER='"+username.toLowerCase()+"'"+
+	      
+	      ResultSet rs = stmt.executeQuery( "SELECT COUNT(*) AS CNT FROM USER WHERE USERNAMELOWER='"+username.toLowerCase()+"'"+
 	    	      " AND PASSWORD='"+password+"';" );
 	      
-	     // System.out.println("AFTER");
+	      
 	      if(rs.getInt("CNT")>0){
-	    	  value = rs.getInt("CNT");
+	    	  value = true;
 	    	  System.out.println("Login Successful");
 	      }
 	      rs.close();
@@ -119,8 +120,168 @@ public class Db {
 	      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
 	      System.exit(0);
 	    }
-	    System.out.println("Operation done successfully");
+	    
 		
+		return value;
+	}
+	
+	public String getLastRecordDate(){
+		
+		String result = "null";
+		
+		Connection c = null;
+	    Statement stmt = null;
+	    try {
+	      Class.forName("org.sqlite.JDBC");
+	      c = DriverManager.getConnection("jdbc:sqlite:risk.db");
+	      c.setAutoCommit(false);
+	      
+
+	      stmt = c.createStatement();
+	   
+	      ResultSet rs = stmt.executeQuery( "SELECT * FROM USER ORDER BY updatetime desc limit 1;" );
+	      while(rs.next()){
+	    	  result = rs.getString("updatetime");  
+	      }
+	      
+	      rs.close();
+	      stmt.close();
+	      c.close();
+	    } catch ( Exception e ) {
+	      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+	      System.exit(0);
+	    }
+		
+		return result;
+	}
+	
+public ArrayList<dbLine> getRecordsByDate(String date){
+	
+	ArrayList<dbLine> result = new ArrayList<dbLine>();
+		
+	Connection c = null;
+    Statement stmt = null;
+    try {
+      Class.forName("org.sqlite.JDBC");
+      c = DriverManager.getConnection("jdbc:sqlite:risk.db");
+      c.setAutoCommit(false);
+      
+
+      stmt = c.createStatement();
+   
+      ResultSet rs = stmt.executeQuery( "SELECT * FROM USER WHERE updatetime > '"+date+"';" );
+      int i = 0;
+      while(rs.next()){
+    	  int rowid = rs.getInt("ROWID");
+    	  String user = rs.getString("USERNAME");
+    	  String user2 = rs.getString("USERNAMELOWER");
+    	  String email = rs.getString("EMAIL");
+    	  String password = rs.getString("Password");
+    	  String updatetime = rs.getString("updatetime");
+    	  
+    	  
+    	  
+    	  dbLine dbl = new dbLine(rowid,user,user2,email,password,updatetime);
+    	  result.add(dbl);
+    	  ++i;
+      }
+      
+      
+      rs.close();
+      stmt.close();
+      c.close();
+    } catch ( Exception e ) {
+      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+      System.exit(0);
+    }
+		
+		return result;
+	}
+	
+	
+	public boolean exists(String username){
+		boolean value = false;
+		
+		Connection c = null;
+	    Statement stmt = null;
+	    try {
+	      Class.forName("org.sqlite.JDBC");
+	      c = DriverManager.getConnection("jdbc:sqlite:risk.db");
+	      c.setAutoCommit(false);
+
+	      stmt = c.createStatement();
+	   
+	      ResultSet rs = stmt.executeQuery( "SELECT COUNT(*) AS CNT FROM USER WHERE USERNAMELOWER='"+
+	      username.toLowerCase()+"';" );
+	      
+	      if(rs.getInt("CNT")>0){
+	    	  value = true;
+	      }
+	      rs.close();
+	      stmt.close();
+	      c.close();
+	    } catch ( Exception e ) {
+	      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+	      System.exit(0);
+	    }
+		return value;
+	}
+	
+	
+	public boolean updateRecord(String u, String u2, String e, String p, String time){
+		boolean value = false;
+		
+		Connection c = null;
+	    Statement stmt = null;
+	    try {
+	      Class.forName("org.sqlite.JDBC");
+	      c = DriverManager.getConnection("jdbc:sqlite:risk.db");
+	      c.setAutoCommit(false);
+
+	      stmt = c.createStatement();
+	   
+	      stmt.executeUpdate( "UPDATE USER SET USERNAME= '"+u+"', USERNAMELOWER='"+u2+"',EMAIL='"+
+	      e+"', PASSWORD='"+p+"', updatetime='"+time+"' WHERE USERNAME ='"+u+"';");
+	      
+	      
+	      stmt.close();
+	      c.commit();
+	      c.close();
+	      return true;
+	    } catch ( Exception ex ) {
+	      System.err.println( ex.getClass().getName() + ": " + ex.getMessage() );
+	      System.exit(0);
+	    }
+		return value;
+	}
+	
+	public boolean createRecord(String u, String u2, String e, String p, String time){
+		boolean value = false;
+		
+		Connection c = null;
+	    Statement stmt = null;
+	    try {
+	      Class.forName("org.sqlite.JDBC");
+	      c = DriverManager.getConnection("jdbc:sqlite:risk.db");
+	      c.setAutoCommit(false);
+
+	      stmt = c.createStatement();
+	   
+	      stmt.executeUpdate( "INSERT INTO USER (USERNAME, USERNAMELOWER,EMAIL,PASSWORD,updatetime) values ('"+
+	      u+"','"+u2+"','"+e+"','"+p+"','"+time+"');");
+	      
+	      
+	      
+	      stmt.close();
+	      c.commit();
+	      c.close();
+	      return true;
+	      
+	    } catch ( Exception ex ) {
+	      System.err.println( ex.getClass().getName() + ": " + ex.getMessage() );
+	      ex.printStackTrace();
+	      System.exit(0);
+	    }
 		return value;
 	}
 
