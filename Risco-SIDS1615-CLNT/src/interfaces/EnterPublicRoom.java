@@ -119,7 +119,7 @@ public class EnterPublicRoom extends JFrame {
 		panel_4.setBounds(10, 77, 425, 35);
 		panel_2.add(panel_4);
 		
-		JLabel lblPleaseLoginBelow = new JLabel("Create your account here");
+		JLabel lblPleaseLoginBelow = new JLabel("Enter public room");
 		panel_4.add(lblPleaseLoginBelow);
 		lblPleaseLoginBelow.setHorizontalAlignment(SwingConstants.CENTER);
 		lblPleaseLoginBelow.setFont(new Font("Tahoma", Font.PLAIN, 20));
