@@ -10,11 +10,18 @@ public class Main {
 
 	public static void main(String[] args) 
 	{
-		Interfaces intf = new Interfaces();
+		if(args.length != 2)
+		{
+			System.out.println("Usage: <mediator ip> <mediator TCPPort>");
+			return;
+		}
+		 
+		Interfaces intf = new Interfaces();	
 		
-		cl = new HttpClnt();
+		String ip = args[0];
+		int port = Integer.parseInt(args[1]);
 		
-		//cl.addInterface(intf);
+		cl = new HttpClnt(ip, port);
 		
 		intf.controlaInterfaces();
 	}

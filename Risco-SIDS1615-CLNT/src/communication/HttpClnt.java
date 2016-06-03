@@ -3,16 +3,21 @@ package communication;
 import java.io.*;
 import java.net.*;
 
-import interfaces.Interfaces;
-
 public class HttpClnt 
 {
-	private Interfaces inter;
+	private String ip;
+	private int port;
+	
+	public HttpClnt(String ip, int port)
+	{
+		this.ip = ip;
+		this.port = port;
+	}
 	
 	public String httpReq(String request) throws IOException
 	{
 		String response = "";
-		URL url = new URL("http://192.168.0.162:8083" + request);
+		URL url = new URL("http://" + ip + ":" + port + request);
 		URLConnection conn = url.openConnection();
 		
 		BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
@@ -23,13 +28,9 @@ public class HttpClnt
 		{
 			response = inputLine;
 
-			System.out.println(response);			
+			System.out.println("FROM SERVER: " + response);			
 		}
 		
 		return response;
-	}
-	
-	public void addInterface(Interfaces inter){
-		this.inter= inter;
 	}
 }
