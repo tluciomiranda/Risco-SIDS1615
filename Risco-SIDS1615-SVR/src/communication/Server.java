@@ -1,6 +1,8 @@
 package communication;
 
 import db.Db;
+import communication.UserManager;
+
 
 public class Server {
 	
@@ -28,14 +30,16 @@ public class Server {
 		 db = new Db();
 		 db.startDb();		 
 		
+
 		 UserManager umanager = new UserManager(http);		 
 		 RoomManager rmanager = new RoomManager(http);
 		 http = new HttpSvr(httpPort);
 		 http.initServer();		
 		
 		 // atribuir contexto ao servidor HTTP
+
 		 http.addContext("/game", rmanager);
-		 http.addContext("/user", umanager);		 
+		 http.addContext("/user", umanager);
 		 	 
 		 TCPServer tcpServer = new TCPServer(db, ip, tcpPort);
 		 tcpServer.addMediator(mediatorIp,mediatorPort);
