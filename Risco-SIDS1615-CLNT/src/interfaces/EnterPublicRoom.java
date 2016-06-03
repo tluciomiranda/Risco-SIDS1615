@@ -19,6 +19,7 @@ import javax.swing.border.EmptyBorder;
 
 import javafx.util.Pair;
 import main.Main;
+import javax.swing.JList;
 
 @SuppressWarnings("serial")
 public class EnterPublicRoom extends JFrame {
@@ -95,6 +96,11 @@ public class EnterPublicRoom extends JFrame {
 		label_2.setBounds(720, 48, 46, 14);
 		panel_1.add(label_2);
 		
+		JPanel panel_5 = new JPanel();
+		panel_5.setBackground(Color.WHITE);
+		panel_5.setBounds(10, 73, 885, 332);
+		panel_1.add(panel_5);
+		
 		JPanel panel_2 = new JPanel();
 		panel_2.setBounds(0, 0, 998, 123);
 		panel.add(panel_2);
@@ -113,7 +119,7 @@ public class EnterPublicRoom extends JFrame {
 		panel_4.setBounds(10, 77, 425, 35);
 		panel_2.add(panel_4);
 		
-		JLabel lblPleaseLoginBelow = new JLabel("Create your account here");
+		JLabel lblPleaseLoginBelow = new JLabel("Enter public room");
 		panel_4.add(lblPleaseLoginBelow);
 		lblPleaseLoginBelow.setHorizontalAlignment(SwingConstants.CENTER);
 		lblPleaseLoginBelow.setFont(new Font("Tahoma", Font.PLAIN, 20));
