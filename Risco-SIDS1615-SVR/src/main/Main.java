@@ -1,28 +1,27 @@
 package main;
-
 import communication.*;
-import db.Db;
-import game.RoomManager;
 
-public class Main
-{
-	public static HttpSvr http;
-	public static Db db;
+
+public class Main {
 	
-	public static void main(String[] args) 
-	{
-		RoomManager manager = new RoomManager(); 
-		User userThread = new User();
+	
+	
+	
+	
+	 public static void main(String args[]) { 
+		 
+		 if(args.length != 2){
+			System.out.println("Usage: <localmachine ip> <TCPPort>");
+			return;
+		}
+			
+			
+		int port = Integer.parseInt(args[1]);
+		String ip = args[0];
 		
-		http = new HttpSvr(8083);		
-		http.initServer();
-		
-		db = new Db();
-		db.startDb();
-		
-		// atribuir contexto ao servidor HTTP
-		http.addContext("/game", manager);
-		http.addContext("/user", userThread);		
-	}
+		 Server sv = new Server(ip,port);
+		 sv.go();
+		 
+	 }
 
 }
