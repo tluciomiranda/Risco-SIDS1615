@@ -138,12 +138,11 @@ public class EnterPrivateRoom extends JFrame {
 		String result = null;
 		String roomid = roomIdField.getText();
 		String password = new String(passwordField.getPassword());
-		int usr = Main.userID;
 		password = Utils.encrypt(password);
 		
 		try
 		{
-			result = Main.cl.httpReq("/game?action=join&user=" + usr + "&type=private&id=" + roomid + "&password=" + password);
+			result = Main.cl.httpReq("/game?action=join&type=private&id=" + roomid + "&password=" + password);
 		}
 		catch (IOException e1)
 		{

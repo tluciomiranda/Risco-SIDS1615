@@ -33,7 +33,7 @@ public class CreatePrivateRoom extends JFrame {
 	 * Create the frame.
 	 */
 	public CreatePrivateRoom()
-	{		
+	{
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1024, 768);
 		contentPane = new JPanel();
@@ -67,8 +67,7 @@ public class CreatePrivateRoom extends JFrame {
 			public void actionPerformed(ActionEvent e) 
 			{
 				performCreation();
-			}
-			
+			}			
 		});
 		btnLogin.setBounds(331, 195, 89, 23);
 		panel_1.add(btnLogin);
@@ -138,13 +137,12 @@ public class CreatePrivateRoom extends JFrame {
 		String result = null;
 		String maxplayers = maxPlayersField.getText();
 		String password = new String(passwordField.getPassword());
-		int usr = Main.userID;
 		
 		password = Utils.encrypt(password);
 
 		try
 		{
-			result = Main.cl.httpReq("/game?action=create&user=" + usr + "&type=private&maxplayers=" + maxplayers + "&password=" + password);
+			result = Main.cl.httpReq("/game?action=create&type=private&maxplayers=" + maxplayers + "&password=" + password);
 		}
 		catch (IOException e1)
 		{
@@ -154,6 +152,7 @@ public class CreatePrivateRoom extends JFrame {
 		//ajustar resultado
 		if(!result.equals("NOK"))
 		{
+			chooseRoom.setVisible(true);
 			this.dispose();
 		}
 	}

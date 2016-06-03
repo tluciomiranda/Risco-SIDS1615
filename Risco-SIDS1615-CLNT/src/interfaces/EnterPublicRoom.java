@@ -67,7 +67,9 @@ public class EnterPublicRoom extends JFrame {
 				{
 					String id = availableRooms.get(i)[0];
 					String actual = availableRooms.get(i)[1];
-					String available = availableRooms.get(i)[2];
+					String maxPlayers = availableRooms.get(i)[2];
+					
+					System.out.println("Room: " + id + " nrPlayers: " + actual + " maxPlayers: " + maxPlayers);
 				}				
 			}			
 		});
@@ -163,11 +165,10 @@ public class EnterPublicRoom extends JFrame {
 	public ArrayList<String[]> getAvailableRooms()
 	{
 		String result = null;
-		int usr = Main.userID;
 		
 		try
 		{
-			result = Main.cl.httpReq("/game?action=getAvailable&user=" + usr);
+			result = Main.cl.httpReq("/game?action=getAvailable");
 		}
 		catch (IOException e1)
 		{
@@ -175,7 +176,7 @@ public class EnterPublicRoom extends JFrame {
 		}
 		
 		//ajustar resultado
-		if(!result.equals("!OK"))
+		if(!result.equals("NOK"))
 		{
 			ArrayList<String[]> rs = new ArrayList<String[]>();
 			
@@ -192,7 +193,7 @@ public class EnterPublicRoom extends JFrame {
 		}
 		else
 		{
-			//resposta feia
+			System.out.println("sem salas disponiveis");
 			
 			return null;
 		}

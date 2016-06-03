@@ -127,11 +127,10 @@ public class CreatePublicRoom extends JFrame {
 	{
 		String result = null;
 		String maxplayers = maxPlayersField.getText();
-		int usr = Main.userID;
 		
 		try
 		{
-			result = Main.cl.httpReq("/game?action=create&user=" + usr + "&type=public&maxplayers=" + maxplayers);
+			result = Main.cl.httpReq("/game?action=create&type=public&maxplayers=" + maxplayers);
 		}
 		catch (IOException e1)
 		{
@@ -141,6 +140,7 @@ public class CreatePublicRoom extends JFrame {
 		//ajustar resultado
 		if(!result.equals("NOK"))
 		{
+			chooseRoom.setVisible(true);
 			this.dispose();
 		}
 	}
