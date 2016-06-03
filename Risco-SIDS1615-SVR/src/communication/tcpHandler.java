@@ -42,6 +42,8 @@ public class tcpHandler extends Thread {
 			if(!waitList.isEmpty()){
 				
 				Message m = waitList.remove();
+				
+				Utils.So(m.getHeader());
 				if(m.getHeader().equals("POST newsrv")){
 					
 					Utils.So(m.getHeader());
@@ -100,6 +102,8 @@ public class tcpHandler extends Thread {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
+							
+							Utils.So(header);
 						}
 						
 						reply.setHeader(header);
@@ -113,28 +117,11 @@ public class tcpHandler extends Thread {
 					this.svsi.replaceServersInfo(m.getServersInfo());
 				}
 				else if(m.getHeader().equals("POST records_no_reply")){
+					System.out.println("FDS");
+					System.out.println(m.getRs().size());
 					new SaveDbProtocol(m, db).start();
 				}
-				else if(m.value==2){
-					String last = db.getLastRecordDate();
-					Message reply = new Message(3,last);
-					TcpSend ts = new TcpSend(reply);
-					ts.start();
-				}
-				else if(m.value==3){
-					ArrayList<dbLine> records = db.getRecordsByDate(m.id);
-					
-					Message reply = new Message(1,"save");
-					reply.addReceiverIp(m.getSenderIp());
-					System.out.println("sender"+m.getSenderIp());
-					reply.addSenderIp(this.localIp);
-					m.addDb(records);
-					TcpSend ts = new TcpSend(reply);
-					ts.start();
-					System.out.println("RECORDS SENT");
-				}
-				
-				
+
 			}
 			
 			
