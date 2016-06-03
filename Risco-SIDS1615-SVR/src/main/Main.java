@@ -7,7 +7,7 @@ public class Main {
 	 public static void main(String args[]) { 
 		 
 		 if(args.length != 5){
-			System.out.println("Usage: <localmachine ip> <TCPPort><mediator ip><mediator TCPPort> <httpPort>");
+			System.out.println("Usage: <localmachine ip> <TCPPort> <mediator ip> <mediator TCPPort> <httpPort>");
 			return;
 		}
 			

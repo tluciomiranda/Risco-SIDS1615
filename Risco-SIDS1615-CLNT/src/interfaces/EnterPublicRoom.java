@@ -61,16 +61,20 @@ public class EnterPublicRoom extends JFrame {
 		btnLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) 
 			{
-				ArrayList<String[]> availableRooms = getAvailableRooms();
+				ArrayList<String[]> availableRooms = new ArrayList<String[]>();
+				availableRooms = getAvailableRooms();
 				
-				for(int i = 0; i < availableRooms.size(); i++)
+				if(availableRooms != null)
 				{
-					String id = availableRooms.get(i)[0];
-					String actual = availableRooms.get(i)[1];
-					String maxPlayers = availableRooms.get(i)[2];
-					
-					System.out.println("Room: " + id + " nrPlayers: " + actual + " maxPlayers: " + maxPlayers);
-				}				
+					for(int i = 0; i < availableRooms.size(); i++)
+					{
+						String id = availableRooms.get(i)[0];
+						String actual = availableRooms.get(i)[1];
+						String maxPlayers = availableRooms.get(i)[2];
+						
+						System.out.println("Room: " + id + " nrPlayers: " + actual + " maxPlayers: " + maxPlayers);
+					}
+				}
 			}			
 		});
 		btnLogin.setBounds(806, 416, 89, 23);
@@ -164,8 +168,8 @@ public class EnterPublicRoom extends JFrame {
 	
 	public ArrayList<String[]> getAvailableRooms()
 	{
-		String result = null;
-		
+		String result = "";
+
 		try
 		{
 			result = Main.cl.httpReq("/game?action=getAvailable");
@@ -179,10 +183,11 @@ public class EnterPublicRoom extends JFrame {
 		if(!result.equals("NOK"))
 		{
 			ArrayList<String[]> rs = new ArrayList<String[]>();
+			String[] roomData;
 			
 			// processa resultado no formato IDRoom:nrPlayers:MaxPlayers;IDRoom:nrPlayers:MaxPlayers
 			
-			String[] roomData = result.split(";");
+			roomData = result.split(";");
 			
 			for(int i = 0; i < roomData.length; i++)
 			{
