@@ -12,7 +12,7 @@ public class HttpClnt
 	public String httpReq(String request) throws IOException
 	{
 		String response = "";
-		URL url = new URL("http://172.30.29.81:8083" + request);
+		URL url = new URL("http://200r:8083" + request);
 		URLConnection conn = url.openConnection();
 		
 		BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));

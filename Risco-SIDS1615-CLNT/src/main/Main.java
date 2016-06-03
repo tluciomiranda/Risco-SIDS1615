@@ -6,7 +6,7 @@ import interfaces.Interfaces;
 public class Main {
 	
 	public static HttpClnt cl;
-	public static int userID;
+	public static int userID = 12654;
 
 	public static void main(String[] args) 
 	{

@@ -76,15 +76,15 @@ public class UserManager extends Thread implements HttpHandler
 		String username = params.get("username");
 		String password = params.get("password");
 
-		boolean userid = Server.db.loginUser(username, password);
+		int userid = Server.db.loginUser(username, password);
 		System.out.println("user manager login");
 		
-		if(userid)		
+		if(userid != 0)		
 		{
 			try 
     		{
 				System.out.println("RESPONDE OK");
-    			String response = "OK";
+    			String response = "" + userid;
     			
 				exc.sendResponseHeaders(200, response.length());						
 		        OutputStream os = exc.getResponseBody();

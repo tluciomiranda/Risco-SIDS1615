@@ -198,7 +198,6 @@ public class Login extends JFrame
 		
 		if(!result.equals("NOK"))
 		{
-			Main.userID = Integer.parseInt(result);
 			chooseRoom.setVisible(true);
 			this.dispose();
 		}

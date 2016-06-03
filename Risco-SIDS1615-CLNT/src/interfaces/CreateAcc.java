@@ -135,7 +135,7 @@ public class CreateAcc extends JFrame {
 	
 	public void performRegister()
 	{
-		String result = null;
+		String result = "";
 		String usr = usernameField.getText();
 		String password = new String(passwordField.getPassword());
 		String email = emailField.getText();
@@ -151,7 +151,7 @@ public class CreateAcc extends JFrame {
 			e1.printStackTrace();
 		}
 		
-		if(result.equals("OK"))
+		if(!(result == "NOK"))
 		{
 			this.dispose();
 			loginUI.setVisible(true);

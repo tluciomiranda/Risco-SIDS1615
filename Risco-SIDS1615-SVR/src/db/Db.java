@@ -92,8 +92,8 @@ public class Db {
 	    return value;
 	}
 	
-	public boolean loginUser(String username, String password){
-		boolean value = false;
+	public int loginUser(String username, String password){
+		int value = 0;
 		
 		Connection c = null;
 	    Statement stmt = null;
@@ -105,12 +105,12 @@ public class Db {
 
 	      stmt = c.createStatement();
 	      
-	      ResultSet rs = stmt.executeQuery( "SELECT COUNT(*) AS CNT FROM USER WHERE USERNAMELOWER='"+username.toLowerCase()+"'"+
+	      ResultSet rs = stmt.executeQuery( "SELECT ROWID FROM USER WHERE USERNAMELOWER='"+username.toLowerCase()+"'"+
 	    	      " AND PASSWORD='"+password+"';" );
 	      
 	      
-	      if(rs.getInt("CNT")>0){
-	    	  value = true;
+	      if(rs.getInt("ROWID")>0){
+	    	  value = rs.getInt("ROWID");
 	    	  System.out.println("Login Successful");
 	      }
 	      rs.close();
