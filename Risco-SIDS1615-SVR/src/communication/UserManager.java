@@ -24,7 +24,7 @@ public class UserManager extends Thread implements HttpHandler
 	    System.out.println(query);
     	if(query != null)
     	{
-    		 Map<String, String> params = new HashMap<String, String>();
+    		Map<String, String> params = new HashMap<String, String>();
     		
     		for (String param : query.split("&")) 
 		    {
@@ -76,10 +76,10 @@ public class UserManager extends Thread implements HttpHandler
 		String username = params.get("username");
 		String password = params.get("password");
 
-		boolean userid = Server.db.loginUser(username, password);
+		int userid = Server.db.loginUser(username, password);
 		System.out.println("user manager login");
 		
-		if(userid)		
+		if(userid != 0)		
 		{
 			try 
     		{
@@ -89,7 +89,7 @@ public class UserManager extends Thread implements HttpHandler
 				exc.sendResponseHeaders(200, response.length());						
 		        OutputStream os = exc.getResponseBody();
 		        os.write(response.getBytes());
-		        os.close();		        
+		        os.close();
 	        }
     		catch (IOException e)
     		{

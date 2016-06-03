@@ -7,7 +7,6 @@ import java.util.*;
 import com.sun.net.httpserver.*;
 
 import game.Room;
-import main.Main;
 
 public class RoomManager implements HttpHandler 
 {
@@ -26,8 +25,22 @@ public class RoomManager implements HttpHandler
     	
     	if(query != null)
     	{
-    		Map <String,String> params = this.http.queryToMap(t.getRequestURI().getQuery());
-	        
+    		Map<String, String> params = new HashMap<String, String>();
+    	    
+    	    for (String param : query.split("&")) 
+    	    {
+    	        String pair[] = param.split("=");
+    	        
+    	        if(pair.length > 1)
+    	        {
+    	        	params.put(pair[0], pair[1]);
+    	        }
+    	        else
+    	        {
+    	        	params.put(pair[0], "");
+    	        }
+    	    }
+    		
 	        switch (params.get("action"))
 	        {
 	        	case "create":
@@ -54,73 +67,104 @@ public class RoomManager implements HttpHandler
     private void doCreateRoom(Map <String, String> params, HttpExchange exc) throws IOException
     {
     	String type = params.get("type");
-    	String userID = params.get("user");
     	String maxPlayers = params.get("maxplayers");
+    	
+		System.out.println("room creation request");
     	
     	if(type.equals("private"))
     	{
+    		System.out.println("private room creation");
     		//criar sala privada
     		
     		String pw = params.get("password");
     		
     		long id = new Date().getTime();    				
-    		Room r1 = new Room(id, "privada", pw, Integer.parseInt(maxPlayers), Integer.parseInt(userID));
+    		Room r1 = new Room(id, "privada", pw, Integer.parseInt(maxPlayers));
     		
     		rooms.add(r1);
     		
     		this.http.addContext("/room/" + id, r1);
+    		
+    		System.out.println("room creation OK");
     		
     		String response = "ID=" + id;
  	        exc.sendResponseHeaders(200, response.length());
  	        OutputStream os = exc.getResponseBody();
  	        os.write(response.getBytes());
  	        os.close();
+ 	        
+ 	       System.out.println("RESPONSE SENT");
     	}
     	else
     	{
+    		System.out.println("public room creation");
     		//criar sala publica
     		
     		long id = new Date().getTime();    				
-    		Room r1 = new Room(id, "publica", Integer.parseInt(maxPlayers), Integer.parseInt(userID));
+    		Room r1 = new Room(id, "publica", Integer.parseInt(maxPlayers));
     		
     		rooms.add(r1);
     		
-    		this.http.addContext("/room/" + id, r1);
+    		http.addContext("/room/" + id, r1);
+    		
+    		System.out.println("room creation OK");
     		
     		String response = "ID=" + id;
  	        exc.sendResponseHeaders(200, response.length());
  	        OutputStream os = exc.getResponseBody();
  	        os.write(response.getBytes());
  	        os.close();
+ 	        
+ 	        System.out.println("RESPONSE SENT");
     	}
     }
     
     public void getAllPublicRooms(Map <String, String> params, HttpExchange exc) throws IOException
     {
-    	String userID = params.get("user");
+    	System.out.println("public room listing request");
     	String response = "";
     	
-    	for(int i = 0; i < rooms.size(); i++)
-		{
-			long id = rooms.get(i).getId();
-			int currentP = rooms.get(i).getGame().getNrPlayers();
-			int maxP = rooms.get(i).getMaxPlayers();
+    	if(rooms.size() == 0)
+    	{
+	    	for(int i = 0; i < rooms.size(); i++)
+			{
+				long id = rooms.get(i).getId();
+				int currentP = rooms.get(i).getGame().getNrPlayers();
+				int maxP = rooms.get(i).getMaxPlayers();
+				
+				response = response + id + ":" + currentP + ":" + maxP + ";";
 			
-			response = response + id + ":" + currentP + ":" + maxP + ";";
-		}
     	
-    	exc.sendResponseHeaders(200, response.length());
-        OutputStream os = exc.getResponseBody();
-        os.write(response.getBytes());
-        os.close();
+		    	exc.sendResponseHeaders(200, response.length());
+		        OutputStream os = exc.getResponseBody();
+		        os.write(response.getBytes());
+		        os.close();
+		        
+		        System.out.println("RESPONSE SENT");
+			}
+    	}
+    	else
+    	{
+    		response = "NOK";
+			     	
+	    	exc.sendResponseHeaders(200, response.length());
+	        OutputStream os = exc.getResponseBody();
+	        os.write(response.getBytes());
+	        os.close();
+	        
+	        System.out.println("RESPONSE SENT");
+    	}
     }
     
     // acho que isto nao fica aqui...
     private void doJoinRoom(Map <String, String> params, HttpExchange exc) throws IOException
     {
+    	System.out.println("join room request");
+    	
     	String type = params.get("type");
     	String userID = params.get("user");
-    	String roomID = params.get("id");
+    	String roomID = params.get("id");	
+		String response = "";
     	
     	if(type.equals("private"))
     	{
@@ -128,21 +172,44 @@ public class RoomManager implements HttpHandler
     		
     		//join do user na sala depois de confirmar pass
     		
-    		String response = "reposta";
- 	        exc.sendResponseHeaders(200, response.length());
- 	        OutputStream os = exc.getResponseBody();
- 	        os.write(response.getBytes());
- 	        os.close();
+    		for(int i = 0; i < rooms.size(); i++)
+			{
+				long id = rooms.get(i).getId();	
+				
+				if(id == Long.parseLong(roomID))
+				{
+					if(rooms.get(i).checkPassword(pw))
+					{
+						response = "OK";
+						System.out.println("Join room " + roomID + " OK");
+					}
+						
+					else
+					{
+						response = "NOK";
+						System.out.println("Join room " + roomID + " NOT OK");
+					}
+				}
+			}	
+			
+	    	exc.sendResponseHeaders(200, response.length());
+	        OutputStream os = exc.getResponseBody();
+	        os.write(response.getBytes());
+	        os.close();
+	        
+ 	       	System.out.println("RESPONSE SENT");
     	}
     	else
     	{
     		// join do user na sala publica
     		
-    		String response = "reposta";
+    		response = "JOIN ROOM: OK";
  	        exc.sendResponseHeaders(200, response.length());
  	        OutputStream os = exc.getResponseBody();
  	        os.write(response.getBytes());
  	        os.close();
+ 	        
+ 	       System.out.println("RESPONSE SENT");
     	}
     }
 }
