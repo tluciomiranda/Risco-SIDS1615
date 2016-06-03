@@ -1,6 +1,7 @@
 package communication;
 
 import db.Db;
+import main.User;
 import utils.Utils;
 
 
@@ -35,11 +36,13 @@ public class Server {
 		
 		 this.http = new HttpSvr(this.httpPort);		
 		 RoomManager manager = new RoomManager(this.http);
+		 User usr = new User(this.db);
 		 http.initServer();
 		
 		
 		 // atribuir contexto ao servidor HTTP
 		 http.addContext("/game", manager);
+		 http.addContext("/user", usr);
 		 
 		 
 		 	 

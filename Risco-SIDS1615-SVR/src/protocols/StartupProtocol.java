@@ -28,6 +28,11 @@ public class StartupProtocol extends Thread{
 		ts.start();
 		
 		
+		String last = db.getLastRecordDate();
+		Message reply2 = new Message(3,last);
+		TcpSend ts2 = new TcpSend(reply);
+		ts.start();
+		
 		/*
 		Message reply2 = new Message("GET Database");
 		String lastDate = db.getLastRecordDate();
