@@ -11,16 +11,18 @@ public class Server {
 	
 	private String ip;
 	private int tcpPort;
+	private int httpPort;
 	private String mediatorIp;
 	private int mediatorTcpPort;
 	boolean isMediator = false;
 	
 	public static HttpSvr http;
 	
-	public Server(String ip,int tcpPort){
+	public Server(String ip,int tcpPort, int httpPort){
 
 		this.tcpPort = tcpPort;
 		this.ip = ip;
+		this.httpPort = httpPort;
 	}
 		
 	 public void go(String mediatorIp,int mediatorPort) { 
@@ -31,8 +33,8 @@ public class Server {
 		  
 		 
 		
-		 this.http = new HttpSvr(8083);		
-		 RoomManager manager = new RoomManager(http);
+		 this.http = new HttpSvr(this.httpPort);		
+		 RoomManager manager = new RoomManager(this.http);
 		 http.initServer();
 		
 		
